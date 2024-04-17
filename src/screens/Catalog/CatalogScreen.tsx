@@ -5,9 +5,11 @@ import {
   StatusBar,
   Text,
   useColorScheme,
+  View,
 } from 'react-native';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import {CatalogScreenProps} from '../../navigation/types.tsx';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 function CatalogScreen({navigation}: CatalogScreenProps): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
@@ -23,6 +25,9 @@ function CatalogScreen({navigation}: CatalogScreenProps): React.JSX.Element {
         backgroundColor={backgroundStyle.backgroundColor}
       />
       <Text>Catalog</Text>
+      <View>
+        <Icon name="rocket" size={30} color="red" />
+      </View>
       <Button
         title="Open test book"
         onPress={() => navigation.navigate('BookDetails', {bookId: 'Test'})}

@@ -11,7 +11,7 @@ function CatalogStackNavigator() {
     <Stack.Navigator>
       <Stack.Screen
         name="CatalogList"
-        component={(props: any) => <CatalogScreen {...props} />}
+        component={CatalogScreen}
         options={{headerShown: false}}
       />
       <Stack.Screen name="BookDetails" component={BookScreen} />
