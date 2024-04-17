@@ -1,8 +1,15 @@
 import React from 'react';
-import {SafeAreaView, StatusBar, Text, useColorScheme} from 'react-native';
+import {
+  Button,
+  SafeAreaView,
+  StatusBar,
+  Text,
+  useColorScheme,
+} from 'react-native';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
+import {CatalogScreenProps} from '../../navigation/types.tsx';
 
-function CatalogScreen(): React.JSX.Element {
+function CatalogScreen({navigation}: CatalogScreenProps): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
@@ -16,6 +23,10 @@ function CatalogScreen(): React.JSX.Element {
         backgroundColor={backgroundStyle.backgroundColor}
       />
       <Text>Catalog</Text>
+      <Button
+        title="Open test book"
+        onPress={() => navigation.navigate('BookDetails', {bookId: 'Test'})}
+      />
     </SafeAreaView>
   );
 }

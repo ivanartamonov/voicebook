@@ -9,7 +9,11 @@ const Stack = createStackNavigator();
 function CatalogStackNavigator() {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="CatalogList" component={CatalogScreen} />
+      <Stack.Screen
+        name="CatalogList"
+        component={(props: any) => <CatalogScreen {...props} />}
+        options={{headerShown: false}}
+      />
       <Stack.Screen name="BookDetails" component={BookScreen} />
       <Stack.Screen name="Player" component={PlayerScreen} />
     </Stack.Navigator>
