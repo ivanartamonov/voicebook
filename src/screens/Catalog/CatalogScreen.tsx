@@ -30,7 +30,12 @@ function CatalogScreen({navigation}: CatalogScreenProps): React.JSX.Element {
       </View>
       <Button
         title="Open test book"
-        onPress={() => navigation.navigate('BookDetails', {bookId: 'Test'})}
+        onPress={() =>
+          navigation.navigate('Home', {
+            screen: 'BookDetails',
+            params: {bookId: 'Test'},
+          })
+        }
       />
     </SafeAreaView>
   );

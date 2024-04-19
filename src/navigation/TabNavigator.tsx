@@ -4,9 +4,9 @@ import HomeScreen from '../screens/Home/HomeScreen.tsx';
 import ProfileScreen from '../screens/Profile/ProfileScreen.tsx';
 import Icon from 'react-native-vector-icons/Ionicons';
 import CatalogScreen from '../screens/Catalog/CatalogScreen.tsx';
-import {RootStackParamList} from './types.tsx';
+import {TabParamList} from './types.tsx';
 
-const Tab = createBottomTabNavigator<RootStackParamList>();
+const Tab = createBottomTabNavigator<TabParamList>();
 
 type TabIconProps = {focused: boolean; color: string; size: number};
 
@@ -45,7 +45,7 @@ const TabNavigator = () => {
         name="Profile"
         component={ProfileScreen}
         options={{
-          tabBarLabel: 'Catalog',
+          tabBarLabel: 'Profile',
           tabBarIcon: ProfileIcon,
         }}
       />

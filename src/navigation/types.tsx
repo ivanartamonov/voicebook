@@ -1,5 +1,5 @@
 import {StackNavigationProp} from '@react-navigation/stack';
-import {RouteProp} from '@react-navigation/native';
+import {NavigatorScreenParams, RouteProp} from '@react-navigation/native';
 
 type BookDetailsScreenRouteParams = {
   bookId: string;
@@ -14,18 +14,18 @@ export type RootStackParamList = {
   TabNavigator: undefined;
   BookDetails: BookDetailsScreenRouteParams;
   Player: PlayerScreenRouteParams;
-  Home: undefined;
+};
+
+export type TabParamList = {
+  Home: NavigatorScreenParams<RootStackParamList>;
   Catalog: undefined;
   Profile: undefined;
 };
 
 // Define the types for the navigation and route props specific to your screens
-type CatalogScreenNavigationProp = StackNavigationProp<
-  RootStackParamList,
-  'Catalog'
->;
+type CatalogScreenNavigationProp = StackNavigationProp<TabParamList, 'Catalog'>;
 
-type CatalogScreenRouteProp = RouteProp<RootStackParamList, 'Catalog'>;
+type CatalogScreenRouteProp = RouteProp<TabParamList, 'Catalog'>;
 
 // Interface for the screen props
 export interface CatalogScreenProps {
