@@ -1,8 +1,11 @@
 import React from 'react';
 import {SafeAreaView, StatusBar, Text, useColorScheme} from 'react-native';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
+import {ScreenProps} from '../../navigation/TabNavigator.tsx';
 
-function ProfileScreen(): React.JSX.Element {
+type ProfileProps = ScreenProps<'Profile'>;
+
+function ProfileScreen({}: ProfileProps): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {

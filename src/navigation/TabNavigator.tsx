@@ -4,11 +4,24 @@ import HomeScreen from '../screens/Home/HomeScreen.tsx';
 import ProfileScreen from '../screens/Profile/ProfileScreen.tsx';
 import Icon from 'react-native-vector-icons/Ionicons';
 import CatalogScreen from '../screens/Catalog/CatalogScreen.tsx';
-import {TabParamList} from './types.tsx';
+import {NavigatorScreenParams, RouteProp} from '@react-navigation/native';
+import {NativeStackNavigationProp} from 'react-native-screens/native-stack';
+import {RootStackParamList} from './StackNavigator.tsx';
 
 const Tab = createBottomTabNavigator<TabParamList>();
 
 type TabIconProps = {focused: boolean; color: string; size: number};
+
+type TabParamList = {
+  Home: NavigatorScreenParams<RootStackParamList>;
+  Catalog: undefined;
+  Profile: undefined;
+};
+
+export type ScreenProps<RouteName extends keyof TabParamList> = {
+  navigation: NativeStackNavigationProp<TabParamList>;
+  route: RouteProp<TabParamList, RouteName>;
+};
 
 const TabNavigator = () => {
   const HomeIcon = useCallback(({color, size}: TabIconProps) => {

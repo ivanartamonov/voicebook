@@ -1,15 +1,12 @@
 import React from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  useColorScheme,
-  View,
-} from 'react-native';
+import {SafeAreaView, ScrollView, useColorScheme, View} from 'react-native';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import BooksWidget from '../../components/BooksWidget/BooksWidget.tsx';
+import {ScreenProps} from '../../navigation/TabNavigator.tsx';
 
-function HomeScreen(): React.JSX.Element {
+type HomeProps = ScreenProps<'Home'>;
+
+function HomeScreen({}: HomeProps): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
@@ -41,10 +38,6 @@ function HomeScreen(): React.JSX.Element {
 
   return (
     <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
         style={backgroundStyle}>

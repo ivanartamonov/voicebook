@@ -1,17 +1,12 @@
 import React from 'react';
-import {
-  Button,
-  SafeAreaView,
-  StatusBar,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+import {Button, SafeAreaView, Text, useColorScheme, View} from 'react-native';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {CatalogScreenProps} from '../../navigation/types.tsx';
+import {ScreenProps} from '../../navigation/TabNavigator.tsx';
 
-function CatalogScreen({navigation}: CatalogScreenProps): React.JSX.Element {
+type CatalogProps = ScreenProps<'Catalog'>;
+
+function CatalogScreen({navigation}: CatalogProps): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
@@ -20,10 +15,6 @@ function CatalogScreen({navigation}: CatalogScreenProps): React.JSX.Element {
 
   return (
     <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
       <Text>Catalog</Text>
       <View>
         <Icon name="rocket" size={30} color="red" />
@@ -31,9 +22,8 @@ function CatalogScreen({navigation}: CatalogScreenProps): React.JSX.Element {
       <Button
         title="Open test book"
         onPress={() =>
-          navigation.navigate('Home', {
-            screen: 'BookDetails',
-            params: {bookId: 'Test'},
+          navigation.getParent('RootStackNav')?.navigate('BookDetails', {
+            bookId: 123,
           })
         }
       />

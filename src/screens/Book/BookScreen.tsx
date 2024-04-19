@@ -1,9 +1,13 @@
 import React from 'react';
-import {SafeAreaView, StatusBar, Text, useColorScheme} from 'react-native';
+import {Button, SafeAreaView, Text, useColorScheme} from 'react-native';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
+import {ScreenProps} from '../../navigation/StackNavigator.tsx';
 
-function BookScreen(): React.JSX.Element {
+type BookScreenProps = ScreenProps<'BookDetails'>;
+
+function BookScreen({navigation, route}: BookScreenProps): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
+  const {bookId} = route.params;
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
@@ -11,11 +15,15 @@ function BookScreen(): React.JSX.Element {
 
   return (
     <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
+      <Text>Book: {bookId}</Text>
+      <Button
+        title="Listen"
+        onPress={() =>
+          navigation.navigate('Player', {
+            bookId: bookId,
+          })
+        }
       />
-      <Text>Player</Text>
     </SafeAreaView>
   );
 }

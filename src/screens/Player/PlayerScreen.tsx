@@ -1,9 +1,13 @@
 import React from 'react';
-import {SafeAreaView, StatusBar, Text, useColorScheme} from 'react-native';
+import {SafeAreaView, Text, useColorScheme} from 'react-native';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
+import {ScreenProps} from '../../navigation/StackNavigator.tsx';
 
-function PlayerScreen(): React.JSX.Element {
+type PlayerProps = ScreenProps<'Player'>;
+
+const PlayerScreen = ({route}: PlayerProps): React.JSX.Element => {
   const isDarkMode = useColorScheme() === 'dark';
+  const {bookId} = route.params;
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
@@ -11,13 +15,9 @@ function PlayerScreen(): React.JSX.Element {
 
   return (
     <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <Text>Book</Text>
+      <Text>Book {bookId}</Text>
     </SafeAreaView>
   );
-}
+};
 
 export default PlayerScreen;
