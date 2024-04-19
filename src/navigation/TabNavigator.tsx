@@ -1,11 +1,14 @@
 import React, {useCallback} from 'react';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {
+  BottomTabScreenProps,
+  createBottomTabNavigator,
+} from '@react-navigation/bottom-tabs';
 import HomeScreen from '../screens/Home/HomeScreen.tsx';
 import ProfileScreen from '../screens/Profile/ProfileScreen.tsx';
 import Icon from 'react-native-vector-icons/Ionicons';
 import CatalogScreen from '../screens/Catalog/CatalogScreen.tsx';
-import {NavigatorScreenParams, RouteProp} from '@react-navigation/native';
-import {NativeStackNavigationProp} from 'react-native-screens/native-stack';
+import {CompositeScreenProps} from '@react-navigation/native';
+import {StackScreenProps} from '@react-navigation/stack';
 import {RootStackParamList} from './StackNavigator.tsx';
 
 const Tab = createBottomTabNavigator<TabParamList>();
@@ -13,15 +16,16 @@ const Tab = createBottomTabNavigator<TabParamList>();
 type TabIconProps = {focused: boolean; color: string; size: number};
 
 type TabParamList = {
-  Home: NavigatorScreenParams<RootStackParamList>;
+  Home: undefined;
   Catalog: undefined;
   Profile: undefined;
 };
 
-export type ScreenProps<RouteName extends keyof TabParamList> = {
-  navigation: NativeStackNavigationProp<TabParamList>;
-  route: RouteProp<TabParamList, RouteName>;
-};
+export type ScreenProps<RouteName extends keyof TabParamList> =
+  CompositeScreenProps<
+    BottomTabScreenProps<TabParamList, RouteName>,
+    StackScreenProps<RootStackParamList, 'TabNavigator', 'RootStackNav'>
+  >;
 
 const TabNavigator = () => {
   const HomeIcon = useCallback(({color, size}: TabIconProps) => {

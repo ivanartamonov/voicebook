@@ -1,10 +1,12 @@
 import React from 'react';
-import {createStackNavigator} from '@react-navigation/stack';
+import {
+  createStackNavigator,
+  StackNavigationProp,
+} from '@react-navigation/stack';
 import BookScreen from '../screens/Book/BookScreen.tsx';
 import PlayerScreen from '../screens/Player/PlayerScreen.tsx';
 import TabNavigator from './TabNavigator.tsx';
 import {NavigationContainer, RouteProp} from '@react-navigation/native';
-import {NativeStackNavigationProp} from 'react-native-screens/native-stack';
 
 export type RootStackParamList = {
   TabNavigator: undefined;
@@ -13,7 +15,11 @@ export type RootStackParamList = {
 };
 
 export type ScreenProps<RouteName extends keyof RootStackParamList> = {
-  navigation: NativeStackNavigationProp<RootStackParamList>;
+  navigation: StackNavigationProp<
+    RootStackParamList,
+    RouteName,
+    'RootStackNav'
+  >;
   route: RouteProp<RootStackParamList, RouteName>;
 };
 
