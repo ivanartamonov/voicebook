@@ -4,8 +4,9 @@ import HomeScreen from '../screens/Home/HomeScreen.tsx';
 import ProfileScreen from '../screens/Profile/ProfileScreen.tsx';
 import Icon from 'react-native-vector-icons/Ionicons';
 import CatalogScreen from '../screens/Catalog/CatalogScreen.tsx';
+import {RootStackParamList} from './types.tsx';
 
-const Tab = createBottomTabNavigator();
+const Tab = createBottomTabNavigator<RootStackParamList>();
 
 const TabNavigator = () => {
   return (

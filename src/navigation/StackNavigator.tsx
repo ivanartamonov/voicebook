@@ -4,9 +4,10 @@ import BookScreen from '../screens/Book/BookScreen.tsx';
 import PlayerScreen from '../screens/Player/PlayerScreen.tsx';
 import TabNavigator from './TabNavigator.tsx';
 import {NavigationContainer} from '@react-navigation/native';
+import {RootStackParamList} from './types.tsx';
 
 const StackNavigator = () => {
-  const Stack = createStackNavigator();
+  const Stack = createStackNavigator<RootStackParamList>();
 
   return (
     <NavigationContainer>
