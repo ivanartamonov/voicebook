@@ -8,10 +8,11 @@ import {
   View,
 } from 'react-native';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
-import {CatalogScreenProps} from '../../navigation/types.tsx';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import {useNavigation} from '@react-navigation/native';
 
-function CatalogScreen({navigation}: CatalogScreenProps): React.JSX.Element {
+function CatalogScreen(): React.JSX.Element {
+  const navigation = useNavigation();
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
