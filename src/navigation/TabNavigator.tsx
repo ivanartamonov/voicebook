@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import HomeScreen from '../screens/Home/HomeScreen.tsx';
 import ProfileScreen from '../screens/Profile/ProfileScreen.tsx';
@@ -8,7 +8,21 @@ import {RootStackParamList} from './types.tsx';
 
 const Tab = createBottomTabNavigator<RootStackParamList>();
 
+type TabIconProps = {focused: boolean; color: string; size: number};
+
 const TabNavigator = () => {
+  const HomeIcon = useCallback(({color, size}: TabIconProps) => {
+    return <Icon name="home-outline" color={color} size={size} />;
+  }, []);
+
+  const CatalogIcon = useCallback(({color, size}: TabIconProps) => {
+    return <Icon name="headset-outline" color={color} size={size} />;
+  }, []);
+
+  const ProfileIcon = useCallback(({color, size}: TabIconProps) => {
+    return <Icon name="person-outline" color={color} size={size} />;
+  }, []);
+
   return (
     <Tab.Navigator initialRouteName="Home" screenOptions={{headerShown: false}}>
       <Tab.Screen
@@ -16,9 +30,7 @@ const TabNavigator = () => {
         component={HomeScreen}
         options={{
           tabBarLabel: 'Home',
-          tabBarIcon: ({color, size}) => (
-            <Icon name="home-outline" color={color} size={size} />
-          ),
+          tabBarIcon: HomeIcon,
         }}
       />
       <Tab.Screen
@@ -26,9 +38,7 @@ const TabNavigator = () => {
         component={CatalogScreen}
         options={{
           tabBarLabel: 'Catalog',
-          tabBarIcon: ({color, size}) => (
-            <Icon name="headset-outline" color={color} size={size} />
-          ),
+          tabBarIcon: CatalogIcon,
         }}
       />
       <Tab.Screen
@@ -36,12 +46,11 @@ const TabNavigator = () => {
         component={ProfileScreen}
         options={{
           tabBarLabel: 'Catalog',
-          tabBarIcon: ({color, size}) => (
-            <Icon name="person-outline" color={color} size={size} />
-          ),
+          tabBarIcon: ProfileIcon,
         }}
       />
     </Tab.Navigator>
   );
 };
+
 export default TabNavigator;
