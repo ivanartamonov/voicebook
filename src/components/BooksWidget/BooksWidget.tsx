@@ -1,5 +1,6 @@
 import React, {PropsWithChildren} from 'react';
-import {Image, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {FlatList, StyleSheet, Text, View} from 'react-native';
+import BookWidgetItem from './BookWidgetItem.tsx';
 
 type Book = {
   title: string;
@@ -14,22 +15,14 @@ function BooksWidget({heading, books}: BooksWidgetProps): React.JSX.Element {
   return (
     <View style={styles.booksWidget}>
       <Text style={styles.heading}>{heading}</Text>
-      <ScrollView
+      <FlatList
         horizontal
+        data={books}
         showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.bookList}>
-        {books.map((book, index) => (
-          <View key={index} style={styles.bookItem}>
-            <Image
-              source={{
-                uri: book.cover,
-              }}
-              style={styles.bookCover}
-            />
-            <Text>{book.title}</Text>
-          </View>
-        ))}
-      </ScrollView>
+        contentContainerStyle={styles.bookList}
+        renderItem={({item}) => <BookWidgetItem book={item} />}
+        keyExtractor={item => item.title}
+      />
     </View>
   );
 }
@@ -47,14 +40,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingVertical: 10,
     gap: 10,
-  },
-  bookItem: {
-    width: 115,
-  },
-  bookCover: {
-    width: 220 / 2,
-    height: 320 / 2,
-    borderRadius: 5,
   },
 });
 
