@@ -7,7 +7,7 @@ type BookScreenProps = ScreenProps<'BookDetails'>;
 
 function BookScreen({navigation, route}: BookScreenProps): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
-  const {bookId} = route.params;
+  const {book} = route.params;
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
@@ -15,12 +15,12 @@ function BookScreen({navigation, route}: BookScreenProps): React.JSX.Element {
 
   return (
     <SafeAreaView style={backgroundStyle}>
-      <Text>Book: {bookId}</Text>
+      <Text>Book: {book.title}</Text>
       <Button
         title="Listen"
         onPress={() =>
           navigation.navigate('Player', {
-            bookId: bookId,
+            book: book,
           })
         }
       />

@@ -8,11 +8,12 @@ import PlayerScreen from '../screens/Player/PlayerScreen.tsx';
 import TabNavigator from './TabNavigator.tsx';
 import {NavigationContainer, RouteProp, Theme} from '@react-navigation/native';
 import {useTheme} from '../contexts/ThemeContext.tsx';
+import {Book} from '../types/types.ts';
 
 export type RootStackParamList = {
   TabNavigator: undefined;
-  BookDetails: {bookId: number};
-  Player: {bookId: number};
+  BookDetails: {book: Book};
+  Player: {book: Book};
 };
 
 export type ScreenProps<RouteName extends keyof RootStackParamList> = {
@@ -46,7 +47,7 @@ const StackNavigator = () => {
         <Stack.Screen
           name="TabNavigator"
           component={TabNavigator}
-          options={{headerShown: false, title: 'Catalog'}}
+          options={{headerShown: false, title: 'Back'}}
         />
         <Stack.Screen name={'BookDetails'} component={BookScreen} />
         <Stack.Screen name={'Player'} component={PlayerScreen} />
