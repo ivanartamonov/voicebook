@@ -31,7 +31,7 @@ const StackNavigator = () => {
   const NavigationTheme: Theme = {
     dark: isDark,
     colors: {
-      primary: theme.primary,
+      primary: theme.text,
       background: theme.background,
       card: theme.background,
       text: theme.text,
