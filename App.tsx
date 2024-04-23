@@ -4,6 +4,7 @@ import React from 'react';
 import StackNavigator from './src/navigation/StackNavigator.tsx';
 import {StatusBar, useColorScheme} from 'react-native';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
+import {ThemeProvider} from './src/contexts/ThemeContext.tsx';
 
 function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
@@ -14,11 +15,13 @@ function App(): React.JSX.Element {
 
   return (
     <GestureHandlerRootView style={{flex: 1}}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <StackNavigator />
+      <ThemeProvider>
+        <StatusBar
+          barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+          backgroundColor={backgroundStyle.backgroundColor}
+        />
+        <StackNavigator />
+      </ThemeProvider>
     </GestureHandlerRootView>
   );
 }

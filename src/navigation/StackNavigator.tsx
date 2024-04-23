@@ -6,7 +6,8 @@ import {
 import BookScreen from '../screens/Book/BookScreen.tsx';
 import PlayerScreen from '../screens/Player/PlayerScreen.tsx';
 import TabNavigator from './TabNavigator.tsx';
-import {NavigationContainer, RouteProp} from '@react-navigation/native';
+import {NavigationContainer, RouteProp, Theme} from '@react-navigation/native';
+import {useTheme} from '../contexts/ThemeContext.tsx';
 
 export type RootStackParamList = {
   TabNavigator: undefined;
@@ -25,9 +26,22 @@ export type ScreenProps<RouteName extends keyof RootStackParamList> = {
 
 const StackNavigator = () => {
   const Stack = createStackNavigator<RootStackParamList>();
+  const {theme, isDark} = useTheme();
+
+  const NavigationTheme: Theme = {
+    dark: isDark,
+    colors: {
+      primary: theme.primary,
+      background: theme.background,
+      card: theme.background,
+      text: theme.text,
+      border: theme.background,
+      notification: theme.primary,
+    },
+  };
 
   return (
-    <NavigationContainer>
+    <NavigationContainer theme={NavigationTheme}>
       <Stack.Navigator id="RootStackNav">
         <Stack.Screen
           name="TabNavigator"
