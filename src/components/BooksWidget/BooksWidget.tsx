@@ -2,11 +2,8 @@ import React, {PropsWithChildren} from 'react';
 import {FlatList, StyleSheet, Text, View} from 'react-native';
 import BookWidgetItem from './BookWidgetItem.tsx';
 import {useTheme} from '../../contexts/ThemeContext.tsx';
+import {Book} from '../../types/types.ts';
 
-type Book = {
-  title: string;
-  cover: string;
-};
 type BooksWidgetProps = PropsWithChildren<{
   heading: string;
   books: Array<Book>;

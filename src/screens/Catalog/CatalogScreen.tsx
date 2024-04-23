@@ -1,22 +1,29 @@
 import React from 'react';
-import {SafeAreaView, Text, useColorScheme} from 'react-native';
-import {Colors} from 'react-native/Libraries/NewAppScreen';
+import {SafeAreaView, ScrollView, StyleSheet} from 'react-native';
 import {ScreenProps} from '../../navigation/TabNavigator.tsx';
+import SearchInput from '../../components/SearchInput.tsx';
+import {findBooks} from '../../api/Book.ts';
+import BookList from '../../components/BookList/BookList.tsx';
 
 type CatalogProps = ScreenProps<'Catalog'>;
 
 function CatalogScreen({}: CatalogProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
+  const books = findBooks();
 
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <Text>Catalog</Text>
+    <SafeAreaView>
+      <ScrollView style={styles.container}>
+        <SearchInput />
+        <BookList books={books} />
+      </ScrollView>
     </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    padding: 10,
+  },
+});
 
 export default CatalogScreen;
