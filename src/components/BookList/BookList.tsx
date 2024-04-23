@@ -1,6 +1,6 @@
 import React from 'react';
 import {Book} from '../../types/types.ts';
-import BookListItem from '../BookListItem.tsx';
+import BookListItem from './BookListItem.tsx';
 import {StyleSheet, View} from 'react-native';
 
 type Props = {

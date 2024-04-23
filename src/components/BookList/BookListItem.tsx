@@ -1,13 +1,13 @@
 import React from 'react';
 import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
-import {Book} from '../types/types.ts';
-import {Theme} from '../constants/theme.ts';
+import {Book} from '../../types/types.ts';
+import {Theme} from '../../constants/theme.ts';
 import {useNavigation} from '@react-navigation/native';
-import {useTheme} from '../contexts/ThemeContext.tsx';
+import {useTheme} from '../../contexts/ThemeContext.tsx';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {RootStackParamList} from '../navigation/StackNavigator.tsx';
+import {RootStackParamList} from '../../navigation/StackNavigator.tsx';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {tagsToString} from '../utils/BookHelper.ts';
+import {tagsToString} from '../../utils/BookHelper.ts';
 
 type Props = {
   book: Book;
