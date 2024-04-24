@@ -3,6 +3,7 @@ export interface Book {
   title: string;
   cover: string;
   author: Author;
+  abstract: string;
   genre: string;
   tags: Array<Tag>;
   likes: number;

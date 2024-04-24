@@ -47,9 +47,13 @@ const StackNavigator = () => {
         <Stack.Screen
           name="TabNavigator"
           component={TabNavigator}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name={'BookDetails'}
+          component={BookScreen}
           options={{headerShown: false, title: 'Back'}}
         />
-        <Stack.Screen name={'BookDetails'} component={BookScreen} />
         <Stack.Screen name={'Player'} component={PlayerScreen} />
       </Stack.Navigator>
     </NavigationContainer>
