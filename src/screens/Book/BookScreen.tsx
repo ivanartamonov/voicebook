@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  Button,
   Image,
   ImageBackground,
   Pressable,
@@ -17,6 +16,7 @@ import {Theme} from '../../constants/theme.ts';
 import {useTheme} from '../../contexts/ThemeContext.tsx';
 import {StatusBar} from 'react-native';
 import {tagsToString} from '../../utils/BookHelper.ts';
+import ListenButton from './components/ListenButton.tsx';
 
 type BookScreenProps = ScreenProps<'BookDetails'>;
 
@@ -26,50 +26,52 @@ function BookScreen({navigation, route}: BookScreenProps): React.JSX.Element {
   const styles = styling(theme);
 
   return (
-    <ScrollView>
-      <StatusBar
-        barStyle={'light-content'}
-        animated={true}
-        backgroundColor="#444"
-      />
-      <ImageBackground source={{uri: book.cover}} style={styles.coverBg}>
-        <View style={styles.overlay} />
-        <SafeAreaView>
-          <Pressable onPress={() => navigation.goBack()}>
-            <FontAwesome6
-              name="chevron-left"
-              size={24}
-              style={styles.iconBack}
-            />
-          </Pressable>
-        </SafeAreaView>
-      </ImageBackground>
-      <Image source={{uri: book.cover}} style={styles.cover} />
-      <Text style={styles.title}>{book.title}</Text>
-      <Text style={styles.genre}>{book.genre}</Text>
-      <Text style={styles.tags}>{tagsToString(book.tags)}</Text>
-      <View style={styles.counters}>
-        <View style={styles.counter}>
-          <FontAwesome6 name="heart" size={16} color={theme.textSoft} />
-          <Text style={styles.counterLabel}>{book.likes}</Text>
+    <>
+      <ScrollView>
+        <StatusBar
+          barStyle={'light-content'}
+          animated={true}
+          backgroundColor="#444"
+        />
+        <ImageBackground source={{uri: book.cover}} style={styles.coverBg}>
+          <View style={styles.overlay} />
+          <SafeAreaView>
+            <Pressable onPress={() => navigation.goBack()}>
+              <FontAwesome6
+                name="chevron-left"
+                size={24}
+                style={styles.iconBack}
+              />
+            </Pressable>
+          </SafeAreaView>
+        </ImageBackground>
+        <Image source={{uri: book.cover}} style={styles.cover} />
+        <Text style={styles.title}>{book.title}</Text>
+        <Text style={styles.genre}>{book.genre}</Text>
+        <Text style={styles.tags}>{tagsToString(book.tags)}</Text>
+        <View style={styles.counters}>
+          <View style={styles.counter}>
+            <FontAwesome6 name="heart" size={16} color={theme.textSoft} />
+            <Text style={styles.counterLabel}>{book.likes}</Text>
+          </View>
+          <View style={styles.counter}>
+            <FontAwesome name="bookmark-o" size={16} color={theme.textSoft} />
+            <Text style={styles.counterLabel}>Зберегти</Text>
+          </View>
         </View>
-        <View style={styles.counter}>
-          <FontAwesome name="bookmark-o" size={16} color={theme.textSoft} />
-          <Text style={styles.counterLabel}>Зберегти</Text>
-        </View>
-      </View>
-      <Text style={styles.abstractHeading}>Опис книги</Text>
-      <Text style={styles.abstract}>{book.abstract}</Text>
+        <Text style={styles.abstractHeading}>Опис книги</Text>
+        <Text style={styles.abstract}>{book.abstract}</Text>
+      </ScrollView>
 
-      <Button
-        title="Listen"
+      <ListenButton
         onPress={() =>
           navigation.navigate('Player', {
             book: book,
           })
         }
+        title="Слухати"
       />
-    </ScrollView>
+    </>
   );
 }
 
@@ -159,6 +161,7 @@ const styling = (theme: Theme) =>
       fontSize: 16,
       lineHeight: 22,
       textAlign: 'left',
+      marginBottom: 90,
     },
   });
 
