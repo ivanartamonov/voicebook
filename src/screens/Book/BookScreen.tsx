@@ -153,11 +153,11 @@ const styling = (theme: Theme) =>
       fontWeight: '600',
       textAlign: 'left',
       marginBottom: 10,
-      paddingHorizontal: 10,
+      paddingHorizontal: 20,
     },
     abstract: {
       color: theme.text,
-      paddingHorizontal: 10,
+      paddingHorizontal: 20,
       fontSize: 16,
       lineHeight: 22,
       textAlign: 'left',
