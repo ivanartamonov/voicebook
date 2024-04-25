@@ -17,7 +17,7 @@ function HomeScreen({}: HomeProps): React.JSX.Element {
   const books = findBooks();
 
   return (
-    <SafeAreaView style={backgroundStyle}>
+    <SafeAreaView>
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
         style={backgroundStyle}>

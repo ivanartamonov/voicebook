@@ -46,21 +46,24 @@ function BookScreen({navigation, route}: BookScreenProps): React.JSX.Element {
           </SafeAreaView>
         </ImageBackground>
         <Image source={{uri: book.cover}} style={styles.cover} />
-        <Text style={styles.title}>{book.title}</Text>
-        <Text style={styles.genre}>{book.genre}</Text>
-        <Text style={styles.tags}>{tagsToString(book.tags)}</Text>
-        <View style={styles.counters}>
-          <View style={styles.counter}>
-            <FontAwesome6 name="heart" size={16} color={theme.textSoft} />
-            <Text style={styles.counterLabel}>{book.likes}</Text>
+
+        <View style={styles.mainContent}>
+          <Text style={styles.title}>{book.title}</Text>
+          <Text style={styles.genre}>{book.genre}</Text>
+          <Text style={styles.tags}>{tagsToString(book.tags)}</Text>
+          <View style={styles.counters}>
+            <View style={styles.counter}>
+              <FontAwesome6 name="heart" size={16} color={theme.textSoft} />
+              <Text style={styles.counterLabel}>{book.likes}</Text>
+            </View>
+            <View style={styles.counter}>
+              <FontAwesome name="bookmark-o" size={16} color={theme.textSoft} />
+              <Text style={styles.counterLabel}>Зберегти</Text>
+            </View>
           </View>
-          <View style={styles.counter}>
-            <FontAwesome name="bookmark-o" size={16} color={theme.textSoft} />
-            <Text style={styles.counterLabel}>Зберегти</Text>
-          </View>
+          <Text style={styles.abstractHeading}>Опис книги</Text>
+          <Text style={styles.abstract}>{book.abstract}</Text>
         </View>
-        <Text style={styles.abstractHeading}>Опис книги</Text>
-        <Text style={styles.abstract}>{book.abstract}</Text>
       </ScrollView>
 
       <ListenButton
@@ -85,7 +88,7 @@ const styling = (theme: Theme) =>
     },
     coverBg: {
       width: '100%',
-      height: 240,
+      height: 260,
       backgroundColor: 'black',
     },
     cover: {
@@ -107,6 +110,9 @@ const styling = (theme: Theme) =>
       backgroundColor: 'rgba(0,0,0,0.7)',
       width: '100%',
       height: '100%',
+    },
+    mainContent: {
+      paddingHorizontal: 20,
     },
     title: {
       fontSize: 24,
@@ -153,11 +159,9 @@ const styling = (theme: Theme) =>
       fontWeight: '600',
       textAlign: 'left',
       marginBottom: 10,
-      paddingHorizontal: 20,
     },
     abstract: {
       color: theme.text,
-      paddingHorizontal: 20,
       fontSize: 16,
       lineHeight: 22,
       textAlign: 'left',
