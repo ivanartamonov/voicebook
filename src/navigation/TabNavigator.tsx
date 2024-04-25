@@ -10,6 +10,7 @@ import CatalogScreen from '../screens/Catalog/CatalogScreen.tsx';
 import {CompositeScreenProps} from '@react-navigation/native';
 import {StackScreenProps} from '@react-navigation/stack';
 import {RootStackParamList} from './StackNavigator.tsx';
+import {useTheme} from '../contexts/ThemeContext.tsx';
 
 const Tab = createBottomTabNavigator<TabParamList>();
 
@@ -28,6 +29,8 @@ export type ScreenProps<RouteName extends keyof TabParamList> =
   >;
 
 const TabNavigator = () => {
+  const {theme, isDark} = useTheme();
+
   const HomeIcon = useCallback(({color, size}: TabIconProps) => {
     return <Icon name="home-outline" color={color} size={size} />;
   }, []);
@@ -40,6 +43,12 @@ const TabNavigator = () => {
     return <Icon name="person-outline" color={color} size={size} />;
   }, []);
 
+  const tabOptions = {
+    tabBarLabelStyle: {fontSize: 12},
+    tabBarIconStyle: {color: isDark ? 'white' : theme.text},
+    tabBarActiveTintColor: isDark ? 'white' : theme.primary,
+  };
+
   return (
     <Tab.Navigator initialRouteName="Home" screenOptions={{headerShown: false}}>
       <Tab.Screen
@@ -48,6 +57,7 @@ const TabNavigator = () => {
         options={{
           tabBarLabel: 'Home',
           tabBarIcon: HomeIcon,
+          ...tabOptions,
         }}
       />
       <Tab.Screen
@@ -56,6 +66,7 @@ const TabNavigator = () => {
         options={{
           tabBarLabel: 'Catalog',
           tabBarIcon: CatalogIcon,
+          ...tabOptions,
         }}
       />
       <Tab.Screen
@@ -64,6 +75,7 @@ const TabNavigator = () => {
         options={{
           tabBarLabel: 'Profile',
           tabBarIcon: ProfileIcon,
+          ...tabOptions,
         }}
       />
     </Tab.Navigator>

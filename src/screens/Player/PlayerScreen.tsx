@@ -7,7 +7,7 @@ type PlayerProps = ScreenProps<'Player'>;
 
 const PlayerScreen = ({route}: PlayerProps): React.JSX.Element => {
   const isDarkMode = useColorScheme() === 'dark';
-  const {bookId} = route.params;
+  const {book} = route.params;
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
@@ -15,7 +15,7 @@ const PlayerScreen = ({route}: PlayerProps): React.JSX.Element => {
 
   return (
     <SafeAreaView style={backgroundStyle}>
-      <Text>Book {bookId}</Text>
+      <Text>Listening book: {book.title}</Text>
     </SafeAreaView>
   );
 };
