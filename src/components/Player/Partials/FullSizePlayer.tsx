@@ -17,6 +17,7 @@ import {Theme} from '../../../constants/theme.ts';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Slider from '@react-native-community/slider';
+import ChaptersList from './ChaptersList.tsx';
 
 const FullSizePlayer = () => {
   const {theme} = useTheme();
@@ -62,9 +63,9 @@ const FullSizePlayer = () => {
           </View>
         </View>
       </ScrollView>
+
       <View style={styles.fullPlayer}>
-        <Text>Now Playing 2</Text>
-        <Text>{book?.title}</Text>
+        <ChaptersList />
         <Slider
           style={styles.slider}
           minimumValue={0}

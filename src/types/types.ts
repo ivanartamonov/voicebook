@@ -19,3 +19,12 @@ export interface Tag {
   id: string;
   name: string;
 }
+
+export interface Chapter {
+  id: string;
+  book_id: string;
+  title: string;
+  priority: number;
+  duration: number;
+  url: string;
+}
