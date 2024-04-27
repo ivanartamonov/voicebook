@@ -16,6 +16,7 @@ import {usePlayer} from '../../../contexts/PlayerContext.tsx';
 import {Theme} from '../../../constants/theme.ts';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Slider from '@react-native-community/slider';
 
 const FullSizePlayer = () => {
   const {theme} = useTheme();
@@ -64,6 +65,19 @@ const FullSizePlayer = () => {
       <View style={styles.fullPlayer}>
         <Text>Now Playing 2</Text>
         <Text>{book?.title}</Text>
+        <Slider
+          style={styles.slider}
+          minimumValue={0}
+          maximumValue={1}
+          value={0.5}
+          minimumTrackTintColor={theme.text}
+          maximumTrackTintColor={theme.textMuted}
+          thumbTintColor={theme.text}
+        />
+        <View style={styles.timeLabels}>
+          <Text style={styles.timeLabel}>00:00</Text>
+          <Text style={styles.timeLabel}>05:37</Text>
+        </View>
         <View style={styles.controls}>
           <Pressable onPress={() => console.log('Prev')}>
             <FontAwesome6 name="backward-step" size={36} color={theme.text} />
@@ -178,6 +192,19 @@ const styling = (theme: Theme) =>
       gap: 60,
       marginTop: 20,
       alignItems: 'center',
+    },
+    slider: {
+      width: '100%',
+      height: 40,
+      padding: 0,
+    },
+    timeLabels: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      width: '100%',
+    },
+    timeLabel: {
+      color: theme.textSoft,
     },
   });
 
