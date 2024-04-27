@@ -5,16 +5,23 @@ import {useTheme} from '../../../contexts/ThemeContext.tsx';
 import {Theme} from '../../../constants/theme.ts';
 import {getChapters} from '../../../api/Chapter.ts';
 import ChapterListItem from './ChapterListItem.tsx';
+import {Chapter} from '../../../types/types.ts';
+import {usePlayer} from '../../../contexts/PlayerContext.tsx';
 
-const ChaptersList = () => {
+type Props = {
+  curChapter: Chapter;
+};
+
+const ChaptersList = ({curChapter}: Props) => {
   const {theme} = useTheme();
   const [modalVisible, setModalVisible] = useState(false);
   const chapters = getChapters('123');
   const styles = styling(theme);
+  const {setChapter} = usePlayer();
 
-  const onSelect = (chapterId: string) => {
+  const onSelect = (chapter: Chapter) => {
+    setChapter(chapter);
     setModalVisible(!modalVisible);
-    console.log(chapterId);
   };
 
   return (
@@ -22,7 +29,7 @@ const ChaptersList = () => {
       <Pressable
         style={styles.chaptersButton}
         onPress={() => setModalVisible(!modalVisible)}>
-        <Text style={styles.chaptersButtonText}>Глава 1</Text>
+        <Text style={styles.chaptersButtonText}>{curChapter.title}</Text>
         <FontAwesome6 name="list" size={16} color={theme.textSoft} />
       </Pressable>
       <Modal
@@ -48,7 +55,11 @@ const ChaptersList = () => {
               data={chapters}
               contentContainerStyle={styles.chaptersList}
               renderItem={({item}) => (
-                <ChapterListItem chapter={item} onSelect={onSelect} />
+                <ChapterListItem
+                  chapter={item}
+                  onSelect={onSelect}
+                  isCurrent={curChapter.id === item.id}
+                />
               )}
               keyExtractor={chapter => chapter.id}
             />

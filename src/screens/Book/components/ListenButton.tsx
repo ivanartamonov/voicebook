@@ -4,6 +4,7 @@ import {
   Text,
   StyleSheet,
   GestureResponderEvent,
+  ActivityIndicator,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
@@ -11,11 +12,13 @@ import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 interface FloatingActionButtonProps {
   onPress: (event: GestureResponderEvent) => void;
   title: string;
+  isLoading?: boolean;
 }
 
 const FloatingActionButton: React.FC<FloatingActionButtonProps> = ({
   onPress,
   title,
+  isLoading = false,
 }) => {
   return (
     <TouchableOpacity onPress={onPress} style={styles.fab}>
@@ -24,8 +27,14 @@ const FloatingActionButton: React.FC<FloatingActionButtonProps> = ({
         start={{x: 0, y: 0}}
         end={{x: 1, y: 1}}
         style={styles.gradient}>
-        <FontAwesome6 name="headphones" size={24} color="white" />
-        <Text style={styles.text}>{title}</Text>
+        {isLoading ? (
+          <ActivityIndicator size="small" color="white" />
+        ) : (
+          <>
+            <FontAwesome6 name="headphones" size={24} color="white" />
+            <Text style={styles.text}>{title}</Text>
+          </>
+        )}
       </LinearGradient>
     </TouchableOpacity>
   );

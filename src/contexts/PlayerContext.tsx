@@ -1,12 +1,14 @@
 import React, {createContext, useContext, useState, ReactNode} from 'react';
 import {PlayerWindowState, PlayTask} from '../types/player.ts';
-import {Book} from '../types/types.ts';
+import {Book, Chapter} from '../types/types.ts';
 
 type PlayerContextType = {
   windowState: PlayerWindowState;
   setWindowState: React.Dispatch<React.SetStateAction<PlayerWindowState>>;
   book: Book | undefined;
+  chapter: Chapter | undefined;
   setBook: React.Dispatch<React.SetStateAction<Book | undefined>>;
+  setChapter: React.Dispatch<React.SetStateAction<Chapter | undefined>>;
   startPlaying: (playTask: PlayTask) => void;
   closeWindow: () => void;
 };
@@ -22,9 +24,11 @@ export const PlayerProvider = ({children}: ThemeProviderProps) => {
     PlayerWindowState.Closed,
   );
   const [book, setBook] = useState<Book | undefined>(undefined);
+  const [chapter, setChapter] = useState<Chapter | undefined>(undefined);
 
   const startPlaying = (playTask: PlayTask) => {
     setBook(playTask.book);
+    setChapter(playTask.chapter);
     setWindowState(PlayerWindowState.Normal);
   };
 
@@ -39,7 +43,9 @@ export const PlayerProvider = ({children}: ThemeProviderProps) => {
         windowState,
         setWindowState,
         book,
+        chapter,
         setBook,
+        setChapter,
         startPlaying,
         closeWindow,
       }}>

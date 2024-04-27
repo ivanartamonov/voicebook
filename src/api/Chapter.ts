@@ -11,6 +11,17 @@ export const getChapter = (id: string): Chapter => {
   };
 };
 
+export const getFirstBookChapter = (book_id: string): Chapter => {
+  return {
+    id: '1',
+    book_id: book_id,
+    title: 'Глава 1',
+    priority: 1,
+    duration: 380,
+    url: 'https://voicebook.app/play/1',
+  };
+};
+
 export const getChapters = (book_id: string): Array<Chapter> => {
   return [
     {

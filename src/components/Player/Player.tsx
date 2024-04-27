@@ -5,15 +5,19 @@ import MinimizedPlayer from './Partials/MinimizedPlayer.tsx';
 import FullSizePlayer from './Partials/FullSizePlayer.tsx';
 
 const Player = () => {
-  const {windowState} = usePlayer();
+  const {windowState, book, chapter} = usePlayer();
+
+  if (!book || !chapter) {
+    return null;
+  }
 
   switch (windowState) {
     case PlayerWindowState.Closed:
       return null;
     case PlayerWindowState.Minimized:
-      return <MinimizedPlayer />;
+      return <MinimizedPlayer book={book} chapter={chapter} />;
     case PlayerWindowState.Normal:
-      return <FullSizePlayer />;
+      return <FullSizePlayer book={book} chapter={chapter} />;
     default:
       return null;
   }

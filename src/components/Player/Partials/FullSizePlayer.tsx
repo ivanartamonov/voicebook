@@ -18,10 +18,16 @@ import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Slider from '@react-native-community/slider';
 import ChaptersList from './ChaptersList.tsx';
+import {Book, Chapter} from '../../../types/types.ts';
 
-const FullSizePlayer = () => {
+type Props = {
+  book: Book;
+  chapter: Chapter;
+};
+
+const FullSizePlayer = ({book, chapter}: Props) => {
   const {theme} = useTheme();
-  const {setWindowState, book} = usePlayer();
+  const {setWindowState} = usePlayer();
 
   const styles = styling(theme);
 
@@ -33,7 +39,7 @@ const FullSizePlayer = () => {
           animated={true}
           backgroundColor="#444"
         />
-        <ImageBackground source={{uri: book?.cover}} style={styles.coverBg}>
+        <ImageBackground source={{uri: book.cover}} style={styles.coverBg}>
           <View style={styles.overlay} />
           <SafeAreaView>
             <Pressable
@@ -46,15 +52,15 @@ const FullSizePlayer = () => {
             </Pressable>
           </SafeAreaView>
         </ImageBackground>
-        <Image source={{uri: book?.cover}} style={styles.cover} />
+        <Image source={{uri: book.cover}} style={styles.cover} />
 
         <View style={styles.mainContent}>
-          <Text style={styles.title}>{book?.title}</Text>
-          <Text style={styles.genre}>{book?.author.name}</Text>
+          <Text style={styles.title}>{book.title}</Text>
+          <Text style={styles.genre}>{book.author.name}</Text>
           <View style={styles.counters}>
             <View style={styles.counter}>
               <FontAwesome6 name="heart" size={16} color={theme.textSoft} />
-              <Text style={styles.counterLabel}>{book?.likes}</Text>
+              <Text style={styles.counterLabel}>{book.likes}</Text>
             </View>
             <View style={styles.counter}>
               <FontAwesome name="bookmark-o" size={16} color={theme.textSoft} />
@@ -65,7 +71,7 @@ const FullSizePlayer = () => {
       </ScrollView>
 
       <View style={styles.fullPlayer}>
-        <ChaptersList />
+        <ChaptersList curChapter={chapter} />
         <Slider
           style={styles.slider}
           minimumValue={0}

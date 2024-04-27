@@ -13,10 +13,16 @@ import {usePlayer} from '../../../contexts/PlayerContext.tsx';
 import {useNavigation, useNavigationState} from '@react-navigation/native';
 import {Theme} from '../../../constants/theme.ts';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
+import {Book, Chapter} from '../../../types/types.ts';
 
-const MinimizedPlayer = () => {
+type Props = {
+  book: Book;
+  chapter: Chapter;
+};
+
+const MinimizedPlayer = ({book, chapter}: Props) => {
   const {theme} = useTheme();
-  const {windowState, setWindowState, book} = usePlayer();
+  const {windowState, setWindowState} = usePlayer();
   const navigation = useNavigation();
   const navigationState = useNavigationState(state => state);
   const [hasTabs, setHasTabs] = useState(false);
@@ -48,10 +54,10 @@ const MinimizedPlayer = () => {
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={togglePlayer} style={styles.minimizedBar}>
-        <Image source={{uri: book?.cover}} style={styles.bookCover} />
+        <Image source={{uri: book.cover}} style={styles.bookCover} />
         <View style={styles.info}>
-          <Text style={styles.bookTitle}>{book?.title}</Text>
-          <Text style={styles.chapterTitle}>Назва глави (1/12)</Text>
+          <Text style={styles.bookTitle}>{book.title}</Text>
+          <Text style={styles.chapterTitle}>{chapter.title} (1/12)</Text>
         </View>
         <Pressable
           style={styles.iconButton}

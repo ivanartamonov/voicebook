@@ -28,3 +28,12 @@ export interface Chapter {
   duration: number;
   url: string;
 }
+
+export interface Bookmark {
+  id: number;
+  book_id: string;
+  chapter_id: string;
+  time_code: number;
+  created_at: number;
+  updated_at: number;
+}
