@@ -16,7 +16,7 @@ type Props = {
 
 const MinimizedPlayer = ({book, chapter}: Props) => {
   const {theme} = useTheme();
-  const {windowState, setWindowState} = usePlayer();
+  const {windowState, setWindowState, closeWindow} = usePlayer();
   const navigation = useNavigation();
   const navigationState = useNavigationState(state => state);
   const [hasTabs, setHasTabs] = useState(false);
@@ -58,9 +58,7 @@ const MinimizedPlayer = ({book, chapter}: Props) => {
           onPress={() => console.log('Start/Stop')}>
           <FontAwesome6 name="play" size={22} color={theme.text} />
         </Pressable>
-        <Pressable
-          style={styles.iconButton}
-          onPress={() => setWindowState(PlayerWindowState.Closed)}>
+        <Pressable style={styles.iconButton} onPress={closeWindow}>
           <FontAwesome6 name="xmark" size={22} color={theme.text} />
         </Pressable>
       </TouchableOpacity>

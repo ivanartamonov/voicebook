@@ -86,6 +86,7 @@ function BookScreen({navigation, route}: BookScreenProps): React.JSX.Element {
         onPress={handleListen}
         title="Слухати"
         isLoading={isLoading}
+        bookId={book.id}
       />
     </>
   );
