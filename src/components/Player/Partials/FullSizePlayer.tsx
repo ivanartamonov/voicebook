@@ -2,7 +2,6 @@ import React from 'react';
 import {
   Image,
   ImageBackground,
-  Pressable,
   SafeAreaView,
   ScrollView,
   StatusBar,
@@ -19,6 +18,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Slider from '@react-native-community/slider';
 import ChaptersList from './ChaptersList.tsx';
 import {Book, Chapter} from '../../../types/types.ts';
+import Pressable from '../../Pressable.tsx';
 
 type Props = {
   book: Book;
@@ -58,14 +58,14 @@ const FullSizePlayer = ({book, chapter}: Props) => {
           <Text style={styles.title}>{book.title}</Text>
           <Text style={styles.genre}>{book.author.name}</Text>
           <View style={styles.counters}>
-            <View style={styles.counter}>
+            <Pressable style={styles.counter}>
               <FontAwesome6 name="heart" size={16} color={theme.textSoft} />
               <Text style={styles.counterLabel}>{book.likes}</Text>
-            </View>
-            <View style={styles.counter}>
+            </Pressable>
+            <Pressable style={styles.counter}>
               <FontAwesome name="bookmark-o" size={16} color={theme.textSoft} />
               <Text style={styles.counterLabel}>Зберегти</Text>
-            </View>
+            </Pressable>
           </View>
         </View>
       </ScrollView>
@@ -86,13 +86,17 @@ const FullSizePlayer = ({book, chapter}: Props) => {
           <Text style={styles.timeLabel}>05:37</Text>
         </View>
         <View style={styles.controls}>
-          <Pressable onPress={() => console.log('Prev')}>
+          <Pressable
+            style={[styles.control, styles.controlSmall]}
+            onPress={() => console.log('Prev')}>
             <FontAwesome6 name="backward-step" size={36} color={theme.text} />
           </Pressable>
-          <Pressable onPress={() => console.log('Play')}>
+          <Pressable style={styles.control} onPress={() => console.log('Play')}>
             <FontAwesome6 name="play" size={48} color={theme.text} />
           </Pressable>
-          <Pressable onPress={() => console.log('Next')}>
+          <Pressable
+            style={[styles.control, styles.controlSmall]}
+            onPress={() => console.log('Next')}>
             <FontAwesome6 name="forward-step" size={36} color={theme.text} />
           </Pressable>
         </View>
@@ -197,8 +201,19 @@ const styling = (theme: Theme) =>
     controls: {
       flexDirection: 'row',
       gap: 60,
-      marginTop: 20,
+      marginTop: 0,
       alignItems: 'center',
+    },
+    control: {
+      borderRadius: 50,
+      width: 80,
+      height: 80,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    controlSmall: {
+      width: 60,
+      height: 60,
     },
     slider: {
       width: '100%',

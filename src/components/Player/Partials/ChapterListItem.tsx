@@ -1,9 +1,10 @@
 import React from 'react';
 import {Chapter} from '../../../types/types.ts';
-import {Pressable, StyleSheet, Text} from 'react-native';
+import {StyleSheet, Text} from 'react-native';
 import {useTheme} from '../../../contexts/ThemeContext.tsx';
 import {Theme} from '../../../constants/theme.ts';
 import {secToTime} from '../../../utils/DateTimeHelper.ts';
+import Pressable from '../../Pressable.tsx';
 
 type Props = {
   chapter: Chapter;

@@ -2,7 +2,6 @@ import React, {useState} from 'react';
 import {
   Image,
   ImageBackground,
-  Pressable,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -19,6 +18,7 @@ import {tagsToString} from '../../utils/BookHelper.ts';
 import ListenButton from './components/ListenButton.tsx';
 import {usePlayer} from '../../contexts/PlayerContext.tsx';
 import {getFirstBookChapter} from '../../api/Chapter.ts';
+import Pressable from '../../components/Pressable.tsx';
 
 type BookScreenProps = ScreenProps<'BookDetails'>;
 
@@ -68,14 +68,14 @@ function BookScreen({navigation, route}: BookScreenProps): React.JSX.Element {
           <Text style={styles.genre}>{book.genre}</Text>
           <Text style={styles.tags}>{tagsToString(book.tags)}</Text>
           <View style={styles.counters}>
-            <View style={styles.counter}>
+            <Pressable style={styles.counter}>
               <FontAwesome6 name="heart" size={16} color={theme.textSoft} />
               <Text style={styles.counterLabel}>{book.likes}</Text>
-            </View>
-            <View style={styles.counter}>
+            </Pressable>
+            <Pressable style={styles.counter}>
               <FontAwesome name="bookmark-o" size={16} color={theme.textSoft} />
               <Text style={styles.counterLabel}>Зберегти</Text>
-            </View>
+            </Pressable>
           </View>
           <Text style={styles.abstractHeading}>Опис книги</Text>
           <Text style={styles.abstract}>{book.abstract}</Text>

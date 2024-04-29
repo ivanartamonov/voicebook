@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  TouchableOpacity,
   Text,
   StyleSheet,
   GestureResponderEvent,
@@ -8,6 +7,7 @@ import {
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
+import Pressable from '../../../components/Pressable.tsx';
 
 interface FloatingActionButtonProps {
   onPress: (event: GestureResponderEvent) => void;
@@ -21,7 +21,7 @@ const FloatingActionButton: React.FC<FloatingActionButtonProps> = ({
   isLoading = false,
 }) => {
   return (
-    <TouchableOpacity onPress={onPress} style={styles.fab}>
+    <Pressable onPress={onPress} style={styles.fab}>
       <LinearGradient
         colors={['#E125AC', '#460777']}
         start={{x: 0, y: 0}}
@@ -36,7 +36,7 @@ const FloatingActionButton: React.FC<FloatingActionButtonProps> = ({
           </>
         )}
       </LinearGradient>
-    </TouchableOpacity>
+    </Pressable>
   );
 };
 

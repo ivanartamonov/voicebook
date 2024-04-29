@@ -1,12 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {
-  Image,
-  Pressable,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {PlayerWindowState} from '../../../types/player.ts';
 import {useTheme} from '../../../contexts/ThemeContext.tsx';
 import {usePlayer} from '../../../contexts/PlayerContext.tsx';
@@ -14,6 +7,7 @@ import {useNavigation, useNavigationState} from '@react-navigation/native';
 import {Theme} from '../../../constants/theme.ts';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import {Book, Chapter} from '../../../types/types.ts';
+import Pressable from '../../Pressable.tsx';
 
 type Props = {
   book: Book;
@@ -119,6 +113,7 @@ const styling = (theme: Theme, hasTabs: boolean) =>
       justifyContent: 'center',
       alignItems: 'center',
       marginRight: -10,
+      borderRadius: 50,
     },
   });
 

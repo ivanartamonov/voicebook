@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {FlatList, Modal, Pressable, StyleSheet, Text, View} from 'react-native';
+import {FlatList, Modal, StyleSheet, Text, View} from 'react-native';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import {useTheme} from '../../../contexts/ThemeContext.tsx';
 import {Theme} from '../../../constants/theme.ts';
@@ -7,6 +7,7 @@ import {getChapters} from '../../../api/Chapter.ts';
 import ChapterListItem from './ChapterListItem.tsx';
 import {Chapter} from '../../../types/types.ts';
 import {usePlayer} from '../../../contexts/PlayerContext.tsx';
+import Pressable from '../../Pressable.tsx';
 
 type Props = {
   curChapter: Chapter;
