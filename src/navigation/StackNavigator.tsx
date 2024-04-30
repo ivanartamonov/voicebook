@@ -4,7 +4,6 @@ import {
   StackNavigationProp,
 } from '@react-navigation/stack';
 import BookScreen from '../screens/Book/BookScreen.tsx';
-import PlayerScreen from '../screens/Player/PlayerScreen.tsx';
 import TabNavigator from './TabNavigator.tsx';
 import {NavigationContainer, RouteProp, Theme} from '@react-navigation/native';
 import {useTheme} from '../contexts/ThemeContext.tsx';
@@ -56,7 +55,6 @@ const StackNavigator = () => {
           component={BookScreen}
           options={{headerShown: false, title: 'Back'}}
         />
-        <Stack.Screen name={'Player'} component={PlayerScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
