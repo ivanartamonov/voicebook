@@ -1,33 +1,57 @@
 import React from 'react';
 import {
-  TouchableOpacity,
-  Text,
-  StyleSheet,
+  ActivityIndicator,
   GestureResponderEvent,
+  StyleSheet,
+  Text,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
+import Pressable from '../../../components/Pressable.tsx';
+import {usePlayer} from '../../../contexts/PlayerContext.tsx';
+import {PlayerWindowState} from '../../../types/player.ts';
 
 interface FloatingActionButtonProps {
   onPress: (event: GestureResponderEvent) => void;
   title: string;
+  isLoading?: boolean;
+  bookId: string;
 }
 
 const FloatingActionButton: React.FC<FloatingActionButtonProps> = ({
   onPress,
   title,
+  isLoading = false,
+  bookId,
 }) => {
+  const {windowState, book} = usePlayer();
+
+  const marginStyle =
+    windowState === PlayerWindowState.Minimized
+      ? {marginBottom: 50}
+      : {marginBottom: 0};
+
+  if (book?.id && bookId === book.id) {
+    return null;
+  }
+
   return (
-    <TouchableOpacity onPress={onPress} style={styles.fab}>
+    <Pressable onPress={onPress} style={[styles.fab, marginStyle]}>
       <LinearGradient
         colors={['#E125AC', '#460777']}
         start={{x: 0, y: 0}}
         end={{x: 1, y: 1}}
         style={styles.gradient}>
-        <FontAwesome6 name="headphones" size={24} color="white" />
-        <Text style={styles.text}>{title}</Text>
+        {isLoading ? (
+          <ActivityIndicator size="small" color="white" />
+        ) : (
+          <>
+            <FontAwesome6 name="headphones" size={24} color="white" />
+            <Text style={styles.text}>{title}</Text>
+          </>
+        )}
       </LinearGradient>
-    </TouchableOpacity>
+    </Pressable>
   );
 };
 

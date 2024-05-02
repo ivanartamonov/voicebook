@@ -4,11 +4,11 @@ import {
   StackNavigationProp,
 } from '@react-navigation/stack';
 import BookScreen from '../screens/Book/BookScreen.tsx';
-import PlayerScreen from '../screens/Player/PlayerScreen.tsx';
 import TabNavigator from './TabNavigator.tsx';
 import {NavigationContainer, RouteProp, Theme} from '@react-navigation/native';
 import {useTheme} from '../contexts/ThemeContext.tsx';
 import {Book} from '../types/types.ts';
+import Player from '../components/Player/Player.tsx';
 
 export type RootStackParamList = {
   TabNavigator: undefined;
@@ -43,6 +43,7 @@ const StackNavigator = () => {
 
   return (
     <NavigationContainer theme={NavigationTheme}>
+      <Player />
       <Stack.Navigator id="RootStackNav">
         <Stack.Screen
           name="TabNavigator"
@@ -54,7 +55,6 @@ const StackNavigator = () => {
           component={BookScreen}
           options={{headerShown: false, title: 'Back'}}
         />
-        <Stack.Screen name={'Player'} component={PlayerScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

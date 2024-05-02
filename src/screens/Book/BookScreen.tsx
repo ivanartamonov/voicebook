@@ -1,8 +1,7 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   Image,
   ImageBackground,
-  Pressable,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -17,13 +16,30 @@ import {useTheme} from '../../contexts/ThemeContext.tsx';
 import {StatusBar} from 'react-native';
 import {tagsToString} from '../../utils/BookHelper.ts';
 import ListenButton from './components/ListenButton.tsx';
+import {usePlayer} from '../../contexts/PlayerContext.tsx';
+import {getFirstBookChapter} from '../../api/Chapter.ts';
+import Pressable from '../../components/Pressable.tsx';
 
 type BookScreenProps = ScreenProps<'BookDetails'>;
 
 function BookScreen({navigation, route}: BookScreenProps): React.JSX.Element {
   const {book} = route.params;
   const {theme} = useTheme();
+  const {startPlaying} = usePlayer();
+  const [isLoading, setIsLoading] = useState(false);
   const styles = styling(theme);
+
+  const handleListen = () => {
+    setIsLoading(true);
+
+    // check for existing bookmark
+    // if exists, start playing from the bookmark
+    // if not, start playing from the first chapter
+    const chapter = getFirstBookChapter(book.id);
+
+    startPlaying({book, chapter});
+    setIsLoading(false);
+  };
 
   return (
     <>
@@ -52,14 +68,14 @@ function BookScreen({navigation, route}: BookScreenProps): React.JSX.Element {
           <Text style={styles.genre}>{book.genre}</Text>
           <Text style={styles.tags}>{tagsToString(book.tags)}</Text>
           <View style={styles.counters}>
-            <View style={styles.counter}>
+            <Pressable style={styles.counter}>
               <FontAwesome6 name="heart" size={16} color={theme.textSoft} />
               <Text style={styles.counterLabel}>{book.likes}</Text>
-            </View>
-            <View style={styles.counter}>
+            </Pressable>
+            <Pressable style={styles.counter}>
               <FontAwesome name="bookmark-o" size={16} color={theme.textSoft} />
               <Text style={styles.counterLabel}>Зберегти</Text>
-            </View>
+            </Pressable>
           </View>
           <Text style={styles.abstractHeading}>Опис книги</Text>
           <Text style={styles.abstract}>{book.abstract}</Text>
@@ -67,12 +83,10 @@ function BookScreen({navigation, route}: BookScreenProps): React.JSX.Element {
       </ScrollView>
 
       <ListenButton
-        onPress={() =>
-          navigation.navigate('Player', {
-            book: book,
-          })
-        }
+        onPress={handleListen}
         title="Слухати"
+        isLoading={isLoading}
+        bookId={book.id}
       />
     </>
   );
