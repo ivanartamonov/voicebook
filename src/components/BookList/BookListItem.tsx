@@ -56,6 +56,7 @@ const styling = (theme: Theme) =>
       flexDirection: 'row',
       gap: 10,
       flex: 1,
+      marginBottom: 10,
     },
     bookCover: {
       width: 200 / 2,
