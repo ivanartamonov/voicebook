@@ -11,6 +11,7 @@ import {getHomeWidgets} from '../../api/Widget.ts';
 import {Widget} from '../../types/types.ts';
 import {Theme} from '../../constants/theme.ts';
 import {useTheme} from '../../contexts/ThemeContext.tsx';
+import Carousel from '../../components/Carousel.tsx';
 
 type HomeProps = ScreenProps<'Home'>;
 
@@ -43,6 +44,7 @@ function HomeScreen({}: HomeProps): React.JSX.Element {
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
         style={styles.container}>
+        <Carousel books={widgets.length > 2 ? widgets[2].books : []} />
         {widgets.map(widget => (
           <BooksWidget
             key={widget.id}
