@@ -71,7 +71,7 @@ const FullSizePlayer = ({book, chapter}: Props) => {
       </ScrollView>
 
       <View style={styles.fullPlayer}>
-        <ChaptersList curChapter={chapter} />
+        <ChaptersList curChapter={chapter} curBook={book} />
         <Slider
           style={styles.slider}
           minimumValue={0}

@@ -1,24 +1,46 @@
-import React, {useState} from 'react';
-import {FlatList, Modal, StyleSheet, Text, View} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {
+  ActivityIndicator,
+  FlatList,
+  Modal,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import {useTheme} from '../../../contexts/ThemeContext.tsx';
 import {Theme} from '../../../constants/theme.ts';
 import {getChapters} from '../../../api/Chapter.ts';
 import ChapterListItem from './ChapterListItem.tsx';
-import {Chapter} from '../../../types/types.ts';
+import {Book, Chapter} from '../../../types/types.ts';
 import {usePlayer} from '../../../contexts/PlayerContext.tsx';
 import Pressable from '../../Pressable.tsx';
 
 type Props = {
   curChapter: Chapter;
+  curBook: Book;
 };
 
-const ChaptersList = ({curChapter}: Props) => {
+const ChaptersList = ({curBook, curChapter}: Props) => {
   const {theme} = useTheme();
   const [modalVisible, setModalVisible] = useState(false);
-  const chapters = getChapters('123');
+  const [chapters, setChapters] = useState<Chapter[]>([]);
+  const [loading, setLoading] = useState(false);
   const styles = styling(theme);
   const {setChapter} = usePlayer();
+
+  useEffect(() => {
+    setLoading(true);
+    getChapters(curBook.id)
+      .then(fetchedChapters => {
+        setChapters(fetchedChapters);
+        setLoading(false);
+      })
+      .catch(error => {
+        console.error('Failed to fetch books:', error);
+        setLoading(false);
+      });
+  }, [curBook]);
 
   const onSelect = (chapter: Chapter) => {
     setChapter(chapter);
@@ -52,18 +74,22 @@ const ChaptersList = ({curChapter}: Props) => {
               <FontAwesome6 name="xmark" size={24} color={theme.text} />
             </Pressable>
             <Text style={styles.heading}>Зміст</Text>
-            <FlatList
-              data={chapters}
-              contentContainerStyle={styles.chaptersList}
-              renderItem={({item}) => (
-                <ChapterListItem
-                  chapter={item}
-                  onSelect={onSelect}
-                  isCurrent={curChapter.id === item.id}
-                />
-              )}
-              keyExtractor={chapter => chapter.id}
-            />
+            {loading ? (
+              <ActivityIndicator size="large" style={styles.loader} />
+            ) : (
+              <FlatList
+                data={chapters}
+                contentContainerStyle={styles.chaptersList}
+                renderItem={({item}) => (
+                  <ChapterListItem
+                    chapter={item}
+                    onSelect={onSelect}
+                    isCurrent={curChapter.id === item.id}
+                  />
+                )}
+                keyExtractor={chapter => chapter.id}
+              />
+            )}
           </View>
         </View>
       </Modal>
@@ -73,6 +99,11 @@ const ChaptersList = ({curChapter}: Props) => {
 
 const styling = (theme: Theme) =>
   StyleSheet.create({
+    loader: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
     chaptersButton: {
       flexDirection: 'row',
       width: '100%',

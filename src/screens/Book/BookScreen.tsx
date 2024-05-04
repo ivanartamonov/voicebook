@@ -32,13 +32,18 @@ function BookScreen({navigation, route}: BookScreenProps): React.JSX.Element {
   const handleListen = () => {
     setIsLoading(true);
 
-    // check for existing bookmark
+    // TODO: check for existing bookmark
     // if exists, start playing from the bookmark
     // if not, start playing from the first chapter
-    const chapter = getFirstBookChapter(book.id);
-
-    startPlaying({book, chapter});
-    setIsLoading(false);
+    getFirstBookChapter(book.id)
+      .then(chapter => {
+        startPlaying({book, chapter});
+        setIsLoading(false);
+      })
+      .catch(error => {
+        console.error('Failed to fetch first chapter:', error);
+        setIsLoading(false);
+      });
   };
 
   return (
