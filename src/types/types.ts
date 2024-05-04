@@ -59,3 +59,9 @@ export interface Bookmark {
   created_at: number;
   updated_at: number;
 }
+
+export interface Widget {
+  id: string;
+  title: string;
+  books: Book[];
+}
