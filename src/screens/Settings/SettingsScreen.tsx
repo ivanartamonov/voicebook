@@ -19,7 +19,7 @@ function SettingsScreen({navigation}: SettingsProps): React.JSX.Element {
   };
 
   const toggleDark = () => {
-    setTheme(Appearance.getColorScheme() === 'dark' ? 'light' : 'dark');
+    setTheme(isDark ? 'light' : 'dark');
   };
 
   return (
