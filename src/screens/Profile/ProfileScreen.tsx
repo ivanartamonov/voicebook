@@ -1,16 +1,21 @@
-import React from 'react';
-import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import React, {useCallback} from 'react';
+import {Linking, SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import {ScreenProps} from '../../navigation/TabNavigator.tsx';
 import {useTheme} from '../../contexts/ThemeContext.tsx';
 import {Theme} from '../../constants/theme.ts';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import Pressable from '../../components/Pressable.tsx';
+import config from '../../constants/config.ts';
 
 type ProfileProps = ScreenProps<'Profile'>;
 
 function ProfileScreen({navigation}: ProfileProps): React.JSX.Element {
   const {theme} = useTheme();
   const styles = styling(theme);
+
+  const openWebsite = useCallback(async () => {
+    await Linking.openURL(config.WEB_URL);
+  }, []);
 
   return (
     <SafeAreaView>
@@ -60,6 +65,20 @@ function ProfileScreen({navigation}: ProfileProps): React.JSX.Element {
           <Text style={styles.menuItemTitle}>Техпідтримка</Text>
           <FontAwesome6 name="chevron-right" size={16} color={theme.textSoft} />
         </Pressable>
+        <Pressable style={styles.menuItem} onPress={openWebsite}>
+          <FontAwesome6
+            name="link"
+            size={22}
+            color={theme.text}
+            style={styles.menuIcon}
+          />
+          <Text style={styles.menuItemTitle}>Відкрити вебсайт</Text>
+          <FontAwesome6
+            name="up-right-from-square"
+            size={16}
+            color={theme.textSoft}
+          />
+        </Pressable>
       </View>
     </SafeAreaView>
   );
@@ -90,7 +109,7 @@ const styling = (theme: Theme) =>
       flexGrow: 1,
     },
     menuIcon: {
-      width: 24,
+      width: 28,
       textAlign: 'center',
     },
     arrowIcon: {
