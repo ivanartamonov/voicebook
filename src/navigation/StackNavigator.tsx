@@ -9,11 +9,12 @@ import {NavigationContainer, RouteProp, Theme} from '@react-navigation/native';
 import {useTheme} from '../contexts/ThemeContext.tsx';
 import {Book} from '../types/types.ts';
 import Player from '../components/Player/Player.tsx';
+import SettingsScreen from '../screens/Settings/SettingsScreen.tsx';
 
 export type RootStackParamList = {
   TabNavigator: undefined;
   BookDetails: {book: Book};
-  Player: {book: Book};
+  Settings: undefined;
 };
 
 export type ScreenProps<RouteName extends keyof RootStackParamList> = {
@@ -53,7 +54,12 @@ const StackNavigator = () => {
         <Stack.Screen
           name={'BookDetails'}
           component={BookScreen}
-          options={{headerShown: false, title: 'Back'}}
+          options={{headerShown: false, title: 'Book'}}
+        />
+        <Stack.Screen
+          name={'Settings'}
+          component={SettingsScreen}
+          options={{headerShown: false, title: 'Settings'}}
         />
       </Stack.Navigator>
     </NavigationContainer>
