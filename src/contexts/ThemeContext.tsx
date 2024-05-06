@@ -5,13 +5,13 @@ import React, {
   useEffect,
   ReactNode,
 } from 'react';
-import {Appearance} from 'react-native';
+import {Appearance, ColorSchemeName} from 'react-native';
 import {Theme, LightTheme, DarkTheme} from '../constants/theme';
 
 type ThemeContextType = {
   theme: Theme;
   isDark: boolean;
-  setIsDark: (isDark: boolean) => void;
+  setTheme: (newTheme: ColorSchemeName) => void;
 };
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
@@ -34,8 +34,12 @@ export const ThemeProvider = ({children}: ThemeProviderProps) => {
 
   const theme = isDark ? DarkTheme : LightTheme;
 
+  const setTheme = (newTheme: ColorSchemeName) => {
+    Appearance.setColorScheme(newTheme);
+  };
+
   return (
-    <ThemeContext.Provider value={{theme, isDark, setIsDark}}>
+    <ThemeContext.Provider value={{theme, isDark, setTheme}}>
       {children}
     </ThemeContext.Provider>
   );

@@ -34,7 +34,7 @@ const styling = (theme: Theme) =>
       alignItems: 'center',
     },
     iconBack: {
-      color: 'white',
+      color: theme.text,
       paddingVertical: 6,
       width: 40,
       textAlign: 'center',
