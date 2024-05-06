@@ -12,6 +12,7 @@ type ThemeContextType = {
   theme: Theme;
   isDark: boolean;
   setTheme: (newTheme: ColorSchemeName) => void;
+  themeMode: ColorSchemeName;
 };
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
@@ -21,25 +22,30 @@ interface ThemeProviderProps {
 }
 
 export const ThemeProvider = ({children}: ThemeProviderProps) => {
-  const colorScheme = Appearance.getColorScheme();
-  const [isDark, setIsDark] = useState(colorScheme === 'dark');
+  const [themeMode, setThemeMode] = useState<ColorSchemeName>(null);
+  const [isDark, setIsDark] = useState(Appearance.getColorScheme() === 'dark');
 
   useEffect(() => {
+    Appearance.setColorScheme(themeMode);
+
     const subscription = Appearance.addChangeListener(({colorScheme}) => {
       setIsDark(colorScheme === 'dark');
     });
 
     return () => subscription.remove();
-  }, []);
+  }, [themeMode]);
 
   const theme = isDark ? DarkTheme : LightTheme;
 
   const setTheme = (newTheme: ColorSchemeName) => {
-    Appearance.setColorScheme(newTheme);
+    setThemeMode(newTheme);
+    if (newTheme !== null) {
+      setIsDark(newTheme === 'dark');
+    }
   };
 
   return (
-    <ThemeContext.Provider value={{theme, isDark, setTheme}}>
+    <ThemeContext.Provider value={{theme, isDark, setTheme, themeMode}}>
       {children}
     </ThemeContext.Provider>
   );

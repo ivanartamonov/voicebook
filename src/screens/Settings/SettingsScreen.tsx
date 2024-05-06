@@ -9,11 +9,9 @@ import {Switch} from 'react-native-gesture-handler';
 type SettingsProps = ScreenProps<'Settings'>;
 
 function SettingsScreen({navigation}: SettingsProps): React.JSX.Element {
-  const {theme, isDark, setTheme} = useTheme();
+  const {theme, isDark, setTheme, themeMode} = useTheme();
   const styles = styling(theme);
-  const [useSystemTheme, setUseSystemTheme] = useState(
-    Appearance.getColorScheme() === null,
-  );
+  const [useSystemTheme, setUseSystemTheme] = useState(themeMode === null);
 
   const toggleSystemTheme = () => {
     setTheme(useSystemTheme ? Appearance.getColorScheme() : null);
