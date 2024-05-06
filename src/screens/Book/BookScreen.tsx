@@ -4,6 +4,7 @@ import {
   ImageBackground,
   SafeAreaView,
   ScrollView,
+  Share,
   StyleSheet,
   Text,
   View,
@@ -14,7 +15,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {Theme} from '../../constants/theme.ts';
 import {useTheme} from '../../contexts/ThemeContext.tsx';
 import {StatusBar} from 'react-native';
-import {tagsToString} from '../../utils/BookHelper.ts';
+import {buildBookUrl, tagsToString} from '../../utils/BookHelper.ts';
 import ListenButton from './components/ListenButton.tsx';
 import {usePlayer} from '../../contexts/PlayerContext.tsx';
 import {getFirstBookChapter} from '../../api/Chapter.ts';
@@ -44,6 +45,26 @@ function BookScreen({navigation, route}: BookScreenProps): React.JSX.Element {
         console.error('Failed to fetch first chapter:', error);
         setIsLoading(false);
       });
+  };
+
+  const handleShare = async () => {
+    try {
+      const result = await Share.share({
+        message: book.title,
+        url: buildBookUrl(book.id),
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          console.log('Shared with activity type:', result.activityType);
+        } else {
+          console.log('Shared!');
+        }
+      } else if (result.action === Share.dismissedAction) {
+        console.log('Share dismissed');
+      }
+    } catch (error: any) {
+      console.error(error.message);
+    }
   };
 
   return (
@@ -80,6 +101,9 @@ function BookScreen({navigation, route}: BookScreenProps): React.JSX.Element {
             <Pressable style={styles.counter}>
               <FontAwesome name="bookmark-o" size={16} color={theme.textSoft} />
               <Text style={styles.counterLabel}>Зберегти</Text>
+            </Pressable>
+            <Pressable style={styles.counter} onPress={handleShare}>
+              <FontAwesome name="share" size={16} color={theme.textSoft} />
             </Pressable>
           </View>
           <Text style={styles.abstractHeading}>Опис книги</Text>
