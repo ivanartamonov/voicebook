@@ -10,11 +10,13 @@ import {useTheme} from '../contexts/ThemeContext.tsx';
 import {Book} from '../types/types.ts';
 import Player from '../components/Player/Player.tsx';
 import SettingsScreen from '../screens/Settings/SettingsScreen.tsx';
+import PersonalInfoScreen from '../screens/PersonalInfo/PersonalInfoScreen.tsx';
 
 export type RootStackParamList = {
   TabNavigator: undefined;
   BookDetails: {book: Book};
   Settings: undefined;
+  PersonalInfo: undefined;
 };
 
 export type ScreenProps<RouteName extends keyof RootStackParamList> = {
@@ -60,6 +62,11 @@ const StackNavigator = () => {
           name={'Settings'}
           component={SettingsScreen}
           options={{headerShown: false, title: 'Settings'}}
+        />
+        <Stack.Screen
+          name={'PersonalInfo'}
+          component={PersonalInfoScreen}
+          options={{headerShown: false, title: 'Personal Info'}}
         />
       </Stack.Navigator>
     </NavigationContainer>

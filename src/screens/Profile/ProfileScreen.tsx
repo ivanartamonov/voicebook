@@ -16,14 +16,16 @@ function ProfileScreen({navigation}: ProfileProps): React.JSX.Element {
     <SafeAreaView>
       <View style={styles.container}>
         <Text style={styles.heading}>Profile</Text>
-        <Pressable style={styles.menuItem}>
+        <Pressable
+          style={styles.menuItem}
+          onPress={() => navigation.navigate('PersonalInfo')}>
           <FontAwesome6
             name="user"
             size={22}
             color={theme.text}
             style={styles.menuIcon}
           />
-          <Text style={styles.menuItemTitle}>Особиста інформація</Text>
+          <Text style={styles.menuItemTitle}>Мій акаунт</Text>
           <FontAwesome6 name="chevron-right" size={16} color={theme.textSoft} />
         </Pressable>
         <Pressable

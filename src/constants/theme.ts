@@ -6,6 +6,7 @@ export type Theme = {
   textSoft: string;
   textMuted: string;
   border: string;
+  danger: string;
 };
 
 export const COLORS = {
@@ -16,6 +17,7 @@ export const COLORS = {
   ALMOST_WHITE: '#f1f1f1',
   GRAY_LIGHT: '#aaa',
   GRAY_DARK: '#444',
+  DANGER: '#f62727',
 };
 
 export const LightTheme: Theme = {
@@ -26,6 +28,7 @@ export const LightTheme: Theme = {
   textSoft: COLORS.GRAY_DARK,
   textMuted: COLORS.GRAY_LIGHT,
   border: COLORS.ALMOST_WHITE,
+  danger: COLORS.DANGER,
 };
 
 export const DarkTheme: Theme = {
@@ -36,4 +39,5 @@ export const DarkTheme: Theme = {
   textSoft: COLORS.GRAY_LIGHT,
   textMuted: COLORS.GRAY_DARK,
   border: COLORS.ALMOST_BLACK,
+  danger: COLORS.DANGER,
 };
