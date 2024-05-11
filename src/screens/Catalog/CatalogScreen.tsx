@@ -34,6 +34,7 @@ function CatalogScreen({}: CatalogProps): React.JSX.Element {
 
   const onRefresh = () => {
     setRefreshing(true);
+    setPage(1);
     getBooks()
       .then(fetchedBooks => {
         setBooks(fetchedBooks);
