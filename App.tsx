@@ -6,6 +6,9 @@ import {StatusBar, useColorScheme} from 'react-native';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import {ThemeProvider} from './src/contexts/ThemeContext.tsx';
 import {PlayerProvider} from './src/contexts/PlayerContext.tsx';
+import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
+
+const queryClient = new QueryClient();
 
 function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
@@ -16,17 +19,19 @@ function App(): React.JSX.Element {
 
   return (
     <GestureHandlerRootView style={{flex: 1}}>
-      <ThemeProvider>
-        <PlayerProvider>
-          <StatusBar
-            animated={true}
-            barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-            backgroundColor={backgroundStyle.backgroundColor}
-          />
+      <QueryClientProvider client={queryClient}>
+        <ThemeProvider>
+          <PlayerProvider>
+            <StatusBar
+              animated={true}
+              barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+              backgroundColor={backgroundStyle.backgroundColor}
+            />
 
-          <StackNavigator />
-        </PlayerProvider>
-      </ThemeProvider>
+            <StackNavigator />
+          </PlayerProvider>
+        </ThemeProvider>
+      </QueryClientProvider>
     </GestureHandlerRootView>
   );
 }

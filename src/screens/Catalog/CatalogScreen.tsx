@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {
   ActivityIndicator,
   FlatList,
@@ -8,61 +8,38 @@ import {
 import {ScreenProps} from '../../navigation/TabNavigator.tsx';
 import SearchInput from '../../components/SearchInput.tsx';
 import {getBooks} from '../../api/Book.ts';
-import {Book, Collection} from '../../types/types.ts';
+import {Book, Collection, CollectionMeta} from '../../types/types.ts';
 import BookListItem from '../../components/BookList/BookListItem.tsx';
+import {useInfiniteQuery} from '@tanstack/react-query';
 
 type CatalogProps = ScreenProps<'Catalog'>;
 
 function CatalogScreen({}: CatalogProps): React.JSX.Element {
-  const [books, setBooks] = useState<Collection<Book>>({data: [], meta: {}});
-  const [loading, setLoading] = useState(false);
-  const [refreshing, setRefreshing] = useState(false);
-  const [page, setPage] = useState(1);
-
-  useEffect(() => {
-    setLoading(true);
-    getBooks()
-      .then(fetchedBooks => {
-        setBooks(fetchedBooks);
-        setLoading(false);
-      })
-      .catch(error => {
-        console.error('Failed to fetch books:', error);
-        setLoading(false);
-      });
-  }, []);
+  const [refreshKey, setRefreshKey] = useState(0);
+  const queryBooks = useInfiniteQuery<Collection<Book>, Error>({
+    queryKey: ['books', refreshKey],
+    queryFn: ({pageParam}) => {
+      console.log('fetch page: ', pageParam.current_page);
+      return getBooks(pageParam.current_page);
+    },
+    initialPageParam: {current_page: 1} as CollectionMeta,
+    getNextPageParam: lastPage => {
+      return lastPage.meta.current_page < lastPage.meta.last_page
+        ? {...lastPage.meta, current_page: lastPage.meta.current_page + 1}
+        : undefined;
+    },
+  });
 
   const onRefresh = () => {
-    setRefreshing(true);
-    setPage(1);
-    getBooks()
-      .then(fetchedBooks => {
-        setBooks(fetchedBooks);
-        setRefreshing(false);
-      })
-      .catch(error => {
-        console.error('Failed to fetch books:', error);
-        setRefreshing(false);
-      });
+    //setRefreshKey(prevKey => prevKey + 1);
+    queryBooks.refetch();
   };
 
   const onEndReached = () => {
-    getBooks(page + 1)
-      .then(fetchedBooks => {
-        setBooks({
-          data: [...books.data, ...fetchedBooks.data],
-          meta: fetchedBooks.meta,
-        });
-        setPage(page + 1);
-        setRefreshing(false);
-      })
-      .catch(error => {
-        console.error('Failed to fetch books:', error);
-        setRefreshing(false);
-      });
+    queryBooks.fetchNextPage();
   };
 
-  if (loading) {
+  if (queryBooks.isLoading) {
     return <ActivityIndicator style={styles.loader} size="large" />;
   }
 
@@ -70,15 +47,17 @@ function CatalogScreen({}: CatalogProps): React.JSX.Element {
     <SafeAreaView>
       <FlatList
         style={styles.container}
-        data={books.data}
+        data={
+          queryBooks.data?.pages.flatMap(collection => collection.data) || []
+        }
         renderItem={item => <BookListItem book={item.item} />}
         keyExtractor={item => item.id}
         ListHeaderComponent={<SearchInput />}
         ListHeaderComponentStyle={styles.header}
-        refreshing={refreshing}
+        refreshing={queryBooks.isRefetching}
         onRefresh={onRefresh}
         onEndReached={onEndReached}
-        onEndReachedThreshold={0.5}
+        onEndReachedThreshold={0.3}
       />
     </SafeAreaView>
   );

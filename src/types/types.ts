@@ -1,6 +1,6 @@
 export interface Collection<T> {
   data: T[];
-  meta: CollectionMeta | {};
+  meta: CollectionMeta;
 }
 
 export interface CollectionMeta {
