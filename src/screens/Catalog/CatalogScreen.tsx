@@ -56,6 +56,7 @@ function CatalogScreen({}: CatalogProps): React.JSX.Element {
           queryBooks.data?.pages.flatMap(collection => collection.data) || []
         }
         renderItem={item => <BookListItem book={item.item} />}
+        initialNumToRender={5}
         keyExtractor={item => item.id}
         ListHeaderComponent={<SearchInput />}
         ListHeaderComponentStyle={styles.header}
