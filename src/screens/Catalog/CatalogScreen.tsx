@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useCallback} from 'react';
 import {
   ActivityIndicator,
   FlatList,
@@ -11,14 +11,20 @@ import {getBooks} from '../../api/Book.ts';
 import {Book, Collection, CollectionMeta} from '../../types/types.ts';
 import BookListItem from '../../components/BookList/BookListItem.tsx';
 import {useInfiniteQuery} from '@tanstack/react-query';
+import type {DefaultError, InfiniteData, QueryKey} from '@tanstack/query-core';
 
 type CatalogProps = ScreenProps<'Catalog'>;
 
 function CatalogScreen({}: CatalogProps): React.JSX.Element {
-  const [refreshKey, setRefreshKey] = useState(0);
-  const queryBooks = useInfiniteQuery<Collection<Book>, Error>({
-    queryKey: ['books', refreshKey],
-    queryFn: ({pageParam}) => {
+  const queryBooks = useInfiniteQuery<
+    Collection<Book>,
+    DefaultError,
+    InfiniteData<Collection<Book>>,
+    QueryKey,
+    CollectionMeta
+  >({
+    queryKey: ['books'],
+    queryFn: ({pageParam}: {pageParam: CollectionMeta}) => {
       console.log('fetch page: ', pageParam.current_page);
       return getBooks(pageParam.current_page);
     },
@@ -30,14 +36,13 @@ function CatalogScreen({}: CatalogProps): React.JSX.Element {
     },
   });
 
-  const onRefresh = () => {
-    //setRefreshKey(prevKey => prevKey + 1);
+  const onRefresh = useCallback(() => {
     queryBooks.refetch();
-  };
+  }, [queryBooks]);
 
-  const onEndReached = () => {
+  const onEndReached = useCallback(() => {
     queryBooks.fetchNextPage();
-  };
+  }, [queryBooks]);
 
   if (queryBooks.isLoading) {
     return <ActivityIndicator style={styles.loader} size="large" />;
