@@ -4,6 +4,8 @@ import React, {
   useState,
   useEffect,
   ReactNode,
+  useCallback,
+  useMemo,
 } from 'react';
 import {Appearance, ColorSchemeName} from 'react-native';
 import {Theme, LightTheme, DarkTheme} from '../constants/theme';
@@ -37,15 +39,20 @@ export const ThemeProvider = ({children}: ThemeProviderProps) => {
 
   const theme = isDark ? DarkTheme : LightTheme;
 
-  const setTheme = (newTheme: ColorSchemeName) => {
+  const setTheme = useCallback((newTheme: ColorSchemeName) => {
     setThemeMode(newTheme);
     if (newTheme !== null) {
       setIsDark(newTheme === 'dark');
     }
-  };
+  }, []);
+
+  const contextValue = useMemo(
+    () => ({theme, isDark, setTheme, themeMode}),
+    [theme, isDark, setTheme, themeMode],
+  );
 
   return (
-    <ThemeContext.Provider value={{theme, isDark, setTheme, themeMode}}>
+    <ThemeContext.Provider value={contextValue}>
       {children}
     </ThemeContext.Provider>
   );
