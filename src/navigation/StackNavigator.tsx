@@ -47,26 +47,22 @@ const StackNavigator = () => {
   return (
     <NavigationContainer theme={NavigationTheme}>
       <Player />
-      <Stack.Navigator id="RootStackNav">
-        <Stack.Screen
-          name="TabNavigator"
-          component={TabNavigator}
-          options={{headerShown: false}}
-        />
+      <Stack.Navigator id="RootStackNav" screenOptions={{headerShown: false}}>
+        <Stack.Screen name="TabNavigator" component={TabNavigator} />
         <Stack.Screen
           name={'BookDetails'}
           component={BookScreen}
-          options={{headerShown: false, title: 'Book'}}
+          options={{title: 'Book'}}
         />
         <Stack.Screen
           name={'Settings'}
           component={SettingsScreen}
-          options={{headerShown: false, title: 'Settings'}}
+          options={{title: 'Settings'}}
         />
         <Stack.Screen
           name={'PersonalInfo'}
           component={PersonalInfoScreen}
-          options={{headerShown: false, title: 'Personal Info'}}
+          options={{title: 'Personal Info'}}
         />
       </Stack.Navigator>
     </NavigationContainer>
