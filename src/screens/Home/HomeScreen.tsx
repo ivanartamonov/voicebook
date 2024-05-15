@@ -1,38 +1,72 @@
-import React from 'react';
-import {SafeAreaView, ScrollView, useColorScheme, View} from 'react-native';
-import {Colors} from 'react-native/Libraries/NewAppScreen';
+import React, {useEffect, useState} from 'react';
+import {
+  ActivityIndicator,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+} from 'react-native';
 import BooksWidget from '../../components/BooksWidget/BooksWidget.tsx';
 import {ScreenProps} from '../../navigation/TabNavigator.tsx';
-import {findBooks} from '../../api/Book.ts';
+import {getHomeWidgets} from '../../api/Widget.ts';
+import {Widget} from '../../types/types.ts';
+import {Theme} from '../../constants/theme.ts';
+import {useTheme} from '../../contexts/ThemeContext.tsx';
+import Carousel from '../../components/Carousel.tsx';
 
 type HomeProps = ScreenProps<'Home'>;
 
 function HomeScreen({}: HomeProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
+  const {theme} = useTheme();
+  const [loading, setLoading] = useState(false);
+  const [widgets, setWidgets] = useState<Widget[]>([]);
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
+  const styles = styling(theme);
 
-  const books = findBooks();
+  useEffect(() => {
+    setLoading(true);
+    getHomeWidgets()
+      .then(fetchedWidgets => {
+        setWidgets(fetchedWidgets);
+        setLoading(false);
+      })
+      .catch(error => {
+        console.error('Failed to fetch books:', error);
+        setLoading(false);
+      });
+  }, []);
+
+  if (loading) {
+    return <ActivityIndicator style={styles.loader} size="large" />;
+  }
 
   return (
     <SafeAreaView>
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <BooksWidget heading="Popular books" books={books} />
-          <BooksWidget heading="Hot new releases" books={books} />
-          <BooksWidget heading="Bestsellers" books={books} />
-          <BooksWidget heading="Recently updated" books={books} />
-        </View>
+        style={styles.container}>
+        <Carousel books={widgets.length > 2 ? widgets[2].books : []} />
+        {widgets.map(widget => (
+          <BooksWidget
+            key={widget.id}
+            heading={widget.title}
+            books={widget.books}
+          />
+        ))}
       </ScrollView>
     </SafeAreaView>
   );
 }
+
+const styling = (theme: Theme) =>
+  StyleSheet.create({
+    container: {
+      backgroundColor: theme.background,
+    },
+    loader: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+  });
 
 export default HomeScreen;

@@ -4,14 +4,17 @@ import React, {
   useState,
   useEffect,
   ReactNode,
+  useCallback,
+  useMemo,
 } from 'react';
-import {Appearance} from 'react-native';
+import {Appearance, ColorSchemeName} from 'react-native';
 import {Theme, LightTheme, DarkTheme} from '../constants/theme';
 
 type ThemeContextType = {
   theme: Theme;
   isDark: boolean;
-  setIsDark: (isDark: boolean) => void;
+  setTheme: (newTheme: ColorSchemeName) => void;
+  themeMode: ColorSchemeName;
 };
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
@@ -21,21 +24,35 @@ interface ThemeProviderProps {
 }
 
 export const ThemeProvider = ({children}: ThemeProviderProps) => {
-  const colorScheme = Appearance.getColorScheme();
-  const [isDark, setIsDark] = useState(colorScheme === 'dark');
+  const [themeMode, setThemeMode] = useState<ColorSchemeName>(null);
+  const [isDark, setIsDark] = useState(Appearance.getColorScheme() === 'dark');
 
   useEffect(() => {
+    Appearance.setColorScheme(themeMode);
+
     const subscription = Appearance.addChangeListener(({colorScheme}) => {
       setIsDark(colorScheme === 'dark');
     });
 
     return () => subscription.remove();
-  }, []);
+  }, [themeMode]);
 
   const theme = isDark ? DarkTheme : LightTheme;
 
+  const setTheme = useCallback((newTheme: ColorSchemeName) => {
+    setThemeMode(newTheme);
+    if (newTheme !== null) {
+      setIsDark(newTheme === 'dark');
+    }
+  }, []);
+
+  const contextValue = useMemo(
+    () => ({theme, isDark, setTheme, themeMode}),
+    [theme, isDark, setTheme, themeMode],
+  );
+
   return (
-    <ThemeContext.Provider value={{theme, isDark, setIsDark}}>
+    <ThemeContext.Provider value={contextValue}>
       {children}
     </ThemeContext.Provider>
   );

@@ -9,11 +9,14 @@ import {NavigationContainer, RouteProp, Theme} from '@react-navigation/native';
 import {useTheme} from '../contexts/ThemeContext.tsx';
 import {Book} from '../types/types.ts';
 import Player from '../components/Player/Player.tsx';
+import SettingsScreen from '../screens/Settings/SettingsScreen.tsx';
+import PersonalInfoScreen from '../screens/PersonalInfo/PersonalInfoScreen.tsx';
 
 export type RootStackParamList = {
   TabNavigator: undefined;
   BookDetails: {book: Book};
-  Player: {book: Book};
+  Settings: undefined;
+  PersonalInfo: undefined;
 };
 
 export type ScreenProps<RouteName extends keyof RootStackParamList> = {
@@ -44,16 +47,22 @@ const StackNavigator = () => {
   return (
     <NavigationContainer theme={NavigationTheme}>
       <Player />
-      <Stack.Navigator id="RootStackNav">
-        <Stack.Screen
-          name="TabNavigator"
-          component={TabNavigator}
-          options={{headerShown: false}}
-        />
+      <Stack.Navigator id="RootStackNav" screenOptions={{headerShown: false}}>
+        <Stack.Screen name="TabNavigator" component={TabNavigator} />
         <Stack.Screen
           name={'BookDetails'}
           component={BookScreen}
-          options={{headerShown: false, title: 'Back'}}
+          options={{title: 'Book'}}
+        />
+        <Stack.Screen
+          name={'Settings'}
+          component={SettingsScreen}
+          options={{title: 'Settings'}}
+        />
+        <Stack.Screen
+          name={'PersonalInfo'}
+          component={PersonalInfoScreen}
+          options={{title: 'Personal Info'}}
         />
       </Stack.Navigator>
     </NavigationContainer>

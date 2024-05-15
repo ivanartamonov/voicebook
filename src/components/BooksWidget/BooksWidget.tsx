@@ -36,7 +36,8 @@ const styling = (isDark: boolean) =>
       color: isDark ? 'white' : 'black',
     },
     booksWidget: {
-      padding: 10,
+      paddingHorizontal: 10,
+      paddingVertical: 5,
     },
     bookList: {
       flexDirection: 'row',

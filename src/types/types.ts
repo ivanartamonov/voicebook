@@ -1,3 +1,25 @@
+export interface Collection<T> {
+  data: T[];
+  meta: CollectionMeta;
+}
+
+export interface CollectionMeta {
+  current_page: number;
+  from: number;
+  last_page: number;
+  links: PaginationLink[];
+  path: string;
+  per_page: number;
+  to: number;
+  total: number;
+}
+
+export interface PaginationLink {
+  url?: string;
+  label: string;
+  active: boolean;
+}
+
 export interface Book {
   id: string;
   title: string;
@@ -36,4 +58,10 @@ export interface Bookmark {
   time_code: number;
   created_at: number;
   updated_at: number;
+}
+
+export interface Widget {
+  id: string;
+  title: string;
+  books: Book[];
 }

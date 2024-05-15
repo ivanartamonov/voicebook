@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {memo} from 'react';
 import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
 import {Book} from '../../types/types.ts';
 import {Theme} from '../../constants/theme.ts';
@@ -56,6 +56,7 @@ const styling = (theme: Theme) =>
       flexDirection: 'row',
       gap: 10,
       flex: 1,
+      marginBottom: 10,
     },
     bookCover: {
       width: 200 / 2,
@@ -100,4 +101,4 @@ const styling = (theme: Theme) =>
     },
   });
 
-export default BookListItem;
+export default memo(BookListItem);
