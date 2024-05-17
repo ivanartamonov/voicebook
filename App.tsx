@@ -7,6 +7,7 @@ import {Colors} from 'react-native/Libraries/NewAppScreen';
 import {ThemeProvider} from './src/contexts/ThemeContext.tsx';
 import {PlayerProvider} from './src/contexts/PlayerContext.tsx';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
+import {AuthProvider} from './src/contexts/AuthContext.tsx';
 
 const queryClient = new QueryClient();
 
@@ -19,19 +20,21 @@ function App(): React.JSX.Element {
 
   return (
     <GestureHandlerRootView style={{flex: 1}}>
-      <QueryClientProvider client={queryClient}>
-        <ThemeProvider>
-          <PlayerProvider>
-            <StatusBar
-              animated={true}
-              barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-              backgroundColor={backgroundStyle.backgroundColor}
-            />
+      <AuthProvider>
+        <QueryClientProvider client={queryClient}>
+          <ThemeProvider>
+            <PlayerProvider>
+              <StatusBar
+                animated={true}
+                barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+                backgroundColor={backgroundStyle.backgroundColor}
+              />
 
-            <StackNavigator />
-          </PlayerProvider>
-        </ThemeProvider>
-      </QueryClientProvider>
+              <StackNavigator />
+            </PlayerProvider>
+          </ThemeProvider>
+        </QueryClientProvider>
+      </AuthProvider>
     </GestureHandlerRootView>
   );
 }
