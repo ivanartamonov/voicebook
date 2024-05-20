@@ -1,87 +1,24 @@
-import React, {useState} from 'react';
-import {Alert, SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import React from 'react';
+import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import {useTheme} from '../../contexts/ThemeContext.tsx';
 import {Theme} from '../../constants/theme.ts';
 import {ScreenProps} from '../../navigation/StackNavigator.tsx';
 import Pressable from '../../components/Pressable.tsx';
-import TextInput from '../../components/TextInput.tsx';
-import {useAuth} from '../../contexts/AuthContext.tsx';
+import SignUpForm from './components/SignUpForm.tsx';
 
 type SignUpProps = ScreenProps<'SignUp'>;
 
 function SignUpScreen({navigation}: SignUpProps): React.JSX.Element {
   const {theme} = useTheme();
-  const {register} = useAuth();
   const styles = styling(theme);
-  const [email, setEmail] = useState('');
-  const [name, setName] = useState('');
-  const [password, setPassword] = useState('');
-  const [passwordConfirmation, setPasswordConfirmation] = useState('');
-
-  const signUp = () => {
-    try {
-      register({
-        email: email,
-        name: name,
-        password: password,
-        password_confirmation: passwordConfirmation,
-        agree: true,
-      });
-    } catch (error) {
-      if (error instanceof Error) {
-        Alert.alert(error.message);
-      } else {
-        Alert.alert('An error occurred');
-      }
-    }
-  };
 
   return (
     <SafeAreaView>
       <View style={styles.container}>
         <Text style={styles.title}>Registration</Text>
-        <TextInput
-          placeholder="Name"
-          style={styles.input}
-          defaultValue={name}
-          value={name}
-          onChangeText={setName}
-          autoComplete="name"
-          textContentType="name"
-        />
-        <TextInput
-          placeholder="Email"
-          style={styles.input}
-          defaultValue={email}
-          value={email}
-          onChangeText={setEmail}
-          autoComplete="email"
-          inputMode="email"
-          keyboardType="email-address"
-          textContentType="emailAddress"
-          autoCapitalize="none"
-        />
-        <TextInput
-          placeholder="Password"
-          secureTextEntry={true}
-          style={styles.input}
-          defaultValue={password}
-          value={password}
-          onChangeText={setPassword}
-          autoCapitalize="none"
-        />
-        <TextInput
-          placeholder="Confirm Password"
-          secureTextEntry={true}
-          style={styles.input}
-          defaultValue={passwordConfirmation}
-          value={passwordConfirmation}
-          onChangeText={setPasswordConfirmation}
-          autoCapitalize="none"
-        />
-        <Pressable onPress={signUp} style={styles.button}>
-          <Text style={styles.buttonText}>Register</Text>
-        </Pressable>
+
+        <SignUpForm />
+
         <Pressable
           onPress={() => navigation.navigate('SignIn')}
           style={styles.registerButton}>
@@ -106,15 +43,6 @@ const styling = (theme: Theme) =>
       color: theme.text,
       alignSelf: 'center',
       marginBottom: 20,
-    },
-    input: {
-      marginTop: 10,
-    },
-    button: {
-      backgroundColor: theme.primary,
-      padding: 10,
-      borderRadius: 5,
-      marginTop: 20,
     },
     buttonText: {
       fontSize: 16,
