@@ -1,4 +1,5 @@
 import config from '../constants/config.ts';
+import {FieldValues, UseFormSetError} from 'react-hook-form';
 
 export const apiRequest = async <T>(
   endpoint: string | URL | Request,
@@ -49,9 +50,15 @@ export const apiPost = async <T>(
   });
 };
 
+type ApiErrorResponse = {
+  error_type: string;
+  message: string;
+  errors: Record<string, string[]>;
+};
+
 export class ApiError extends Error {
   status: number;
-  data: any;
+  data: ApiErrorResponse;
 
   constructor(status: number, data: any) {
     super(data.message || 'API Error');
@@ -60,6 +67,15 @@ export class ApiError extends Error {
   }
 }
 
-export class ApiValidationError extends ApiError {}
+export class ApiValidationError extends ApiError {
+  fillFormErrors(setError: UseFormSetError<FieldValues>) {
+    Object.keys(this.data.errors).forEach(field => {
+      setError(field as keyof FieldValues, {
+        type: 'server',
+        message: this.data.errors[field][0],
+      });
+    });
+  }
+}
 
 export class ApiCommonError extends ApiError {}

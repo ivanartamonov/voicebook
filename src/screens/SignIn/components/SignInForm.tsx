@@ -1,57 +1,84 @@
-import React, {useState} from 'react';
+import React from 'react';
 import TextInput from '../../../components/TextInput.tsx';
 import Pressable from '../../../components/Pressable.tsx';
 import {Alert, StyleSheet, Text} from 'react-native';
-import {ApiError} from '../../../api/Api.ts';
+import {ApiCommonError, ApiValidationError} from '../../../api/Api.ts';
 import {useAuth} from '../../../contexts/AuthContext.tsx';
 import {useTheme} from '../../../contexts/ThemeContext.tsx';
 import {Theme} from '../../../constants/theme.ts';
+import {Controller, useForm} from 'react-hook-form';
+import {LoginData} from '../../../api/Auth.ts';
+import InputError from '../../../components/InputError.tsx';
 
 const SignInForm = () => {
   const {login} = useAuth();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const {theme} = useTheme();
   const styles = styling(theme);
+  const {
+    control,
+    handleSubmit,
+    setError,
+    formState: {errors},
+  } = useForm<LoginData>();
 
-  const signIn = async () => {
+  const onSubmit = async (data: LoginData) => {
     try {
-      await login({email: email, password: password});
-    } catch (error) {
-      if (error instanceof ApiError) {
+      await login(data);
+    } catch (error: any) {
+      if (error instanceof ApiValidationError) {
+        error.fillFormErrors(setError);
+      } else if (error instanceof ApiCommonError) {
         Alert.alert(error.message);
       } else {
-        Alert.alert('An error occurred');
+        Alert.alert('Unknown error occurred');
       }
     }
   };
 
   return (
     <>
-      <TextInput
-        placeholder="Email"
-        style={styles.input}
-        defaultValue={email}
-        value={email}
-        onChangeText={setEmail}
-        autoComplete="email"
-        inputMode="email"
-        keyboardType="email-address"
-        textContentType="emailAddress"
-        autoCapitalize="none"
+      <Controller
+        control={control}
+        name="email"
+        rules={{required: 'Email is required'}}
+        render={({field: {onChange, onBlur, value}}) => (
+          <TextInput
+            placeholder="Email"
+            style={styles.input}
+            value={value}
+            onBlur={onBlur}
+            onChangeText={onChange}
+            autoComplete="email"
+            inputMode="email"
+            keyboardType="email-address"
+            textContentType="emailAddress"
+            autoCapitalize="none"
+          />
+        )}
       />
-      <TextInput
-        placeholder="Password"
-        secureTextEntry={true}
-        style={styles.input}
-        defaultValue={password}
-        value={password}
-        onChangeText={setPassword}
-        autoComplete="password"
-        textContentType="password"
-        autoCapitalize="none"
+      <InputError error={errors.email?.message} />
+
+      <Controller
+        control={control}
+        name="password"
+        rules={{required: 'Password is required'}}
+        render={({field: {onChange, onBlur, value}}) => (
+          <TextInput
+            placeholder="Password"
+            secureTextEntry={true}
+            style={styles.input}
+            value={value}
+            onBlur={onBlur}
+            onChangeText={onChange}
+            autoComplete="password"
+            textContentType="password"
+            autoCapitalize="none"
+          />
+        )}
       />
-      <Pressable onPress={signIn} style={styles.button}>
+      <InputError error={errors.password?.message} />
+
+      <Pressable onPress={handleSubmit(onSubmit)} style={styles.button}>
         <Text style={styles.buttonText}>Sign In</Text>
       </Pressable>
     </>
