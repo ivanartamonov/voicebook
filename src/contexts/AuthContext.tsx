@@ -65,11 +65,7 @@ export const AuthProvider = ({children}: AuthProviderProps) => {
       dispatch({type: 'LOGIN', payload: token});
     } catch (error) {
       if (error instanceof ApiError) {
-        if (error.status === 422) {
-          throw error;
-        } else {
-          console.error('API error:', error.data);
-        }
+        throw error;
       } else if (error instanceof Error) {
         console.error('Unexpected error:', error.message);
       } else {
@@ -91,11 +87,7 @@ export const AuthProvider = ({children}: AuthProviderProps) => {
       dispatch({type: 'LOGIN', payload: token});
     } catch (error) {
       if (error instanceof ApiError) {
-        if (error.status === 422) {
-          throw error;
-        } else {
-          console.error('API error:', error.data);
-        }
+        throw error;
       } else if (error instanceof Error) {
         console.error('Unexpected error:', error.message);
       } else {
