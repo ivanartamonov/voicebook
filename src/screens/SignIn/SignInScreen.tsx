@@ -43,6 +43,7 @@ function SignInScreen({navigation}: SignInProps): React.JSX.Element {
           inputMode="email"
           keyboardType="email-address"
           textContentType="emailAddress"
+          autoCapitalize="none"
         />
         <TextInput
           placeholder="Password"
@@ -53,6 +54,7 @@ function SignInScreen({navigation}: SignInProps): React.JSX.Element {
           onChangeText={setPassword}
           autoComplete="password"
           textContentType="password"
+          autoCapitalize="none"
         />
         <Pressable onPress={signIn} style={styles.button}>
           <Text style={styles.buttonText}>Sign In</Text>

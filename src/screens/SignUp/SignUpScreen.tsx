@@ -59,6 +59,7 @@ function SignUpScreen({navigation}: SignUpProps): React.JSX.Element {
           inputMode="email"
           keyboardType="email-address"
           textContentType="emailAddress"
+          autoCapitalize="none"
         />
         <TextInput
           placeholder="Password"
@@ -67,6 +68,7 @@ function SignUpScreen({navigation}: SignUpProps): React.JSX.Element {
           defaultValue={password}
           value={password}
           onChangeText={setPassword}
+          autoCapitalize="none"
         />
         <TextInput
           placeholder="Confirm Password"
@@ -75,6 +77,7 @@ function SignUpScreen({navigation}: SignUpProps): React.JSX.Element {
           defaultValue={passwordConfirmation}
           value={passwordConfirmation}
           onChangeText={setPasswordConfirmation}
+          autoCapitalize="none"
         />
         <Pressable onPress={signUp} style={styles.button}>
           <Text style={styles.buttonText}>Register</Text>
