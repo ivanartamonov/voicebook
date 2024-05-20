@@ -13,6 +13,7 @@ import SettingsScreen from '../screens/Settings/SettingsScreen.tsx';
 import PersonalInfoScreen from '../screens/PersonalInfo/PersonalInfoScreen.tsx';
 import SignInScreen from '../screens/SignIn/SignInScreen.tsx';
 import {useAuth} from '../contexts/AuthContext.tsx';
+import SignUpScreen from '../screens/SignUp/SignUpScreen.tsx';
 
 export type RootStackParamList = {
   TabNavigator: undefined;
@@ -20,6 +21,7 @@ export type RootStackParamList = {
   Settings: undefined;
   PersonalInfo: undefined;
   SignIn: undefined;
+  SignUp: undefined;
 };
 
 export type ScreenProps<RouteName extends keyof RootStackParamList> = {
@@ -79,6 +81,13 @@ const StackNavigator = () => {
               options={{
                 title: 'Sign In',
                 animationTypeForReplace: !isAuthenticated ? 'pop' : 'push',
+              }}
+            />
+            <Stack.Screen
+              name={'SignUp'}
+              component={SignUpScreen}
+              options={{
+                title: 'Sign Up',
               }}
             />
           </>

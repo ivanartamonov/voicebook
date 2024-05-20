@@ -6,27 +6,25 @@ import React, {
   useReducer,
   useCallback,
 } from 'react';
-import {User} from '../types/types.ts';
+import {ApiToken} from '../types/types.ts';
+import {LoginData, loginUser, registerUser, RegUserData} from '../api/Auth.ts';
+import {ApiError} from '../api/Api.ts';
 
-type LoginData = {
-  email: string;
-  password: string;
-};
 type AuthContextType = {
-  user: User | null;
+  token: ApiToken | null;
   isAuthenticated: boolean;
   login: (data: LoginData) => void;
   logout: () => void;
-  register: () => void;
+  register: (data: RegUserData) => void;
 };
 type AuthState = {
   isAuthenticated: boolean;
-  user: User | null;
+  token: ApiToken | null;
   isLoading: boolean;
 };
 type Action =
-  | {type: 'LOGIN'; payload: User}
-  | {type: 'POPULATE'; payload: User}
+  | {type: 'LOGIN'; payload: ApiToken}
+  | {type: 'POPULATE'; payload: ApiToken}
   | {type: 'LOGOUT'};
 type AuthProviderProps = {
   children: ReactNode;
@@ -40,21 +38,13 @@ const reducer = (state: AuthState, action: Action) => {
       return {
         ...state,
         isAuthenticated: true,
-        user: action.payload,
+        token: action.payload,
       };
     case 'LOGOUT':
       return {
         ...state,
         isAuthenticated: false,
-        user: null,
-      };
-    case 'POPULATE':
-      return {
-        ...state,
-        user: {
-          ...state.user,
-          ...action.payload,
-        },
+        token: null,
       };
     default:
       throw new Error('Unknown action type');
@@ -63,21 +53,30 @@ const reducer = (state: AuthState, action: Action) => {
 
 export const AuthProvider = ({children}: AuthProviderProps) => {
   const [state, dispatch] = useReducer(reducer, {
-    user: null,
+    token: null,
     isAuthenticated: false,
     isLoading: true,
   });
 
-  const login = useCallback((data: LoginData) => {
-    // In a production app, we need to send some data (usually username, password) to server and get a token
-    // We will also need to handle errors if sign in failed
-    // After getting token, we need to persist the token using `SecureStore`
-    // In the example, we'll use a dummy token
+  const login = useCallback(async (data: LoginData) => {
+    // We need to save the Token in some Secure storage
+    try {
+      const token = await loginUser(data);
+      dispatch({type: 'LOGIN', payload: token});
+    } catch (error) {
+      if (error instanceof ApiError) {
+        if (error.status === 422) {
+          throw error;
+        } else {
+          console.error('API error:', error.data);
+        }
+      } else if (error instanceof Error) {
+        console.error('Unexpected error:', error.message);
+      } else {
+        console.error('An error occurred');
+      }
 
-    if (data.email === 'Test' && data.password === '111') {
-      dispatch({type: 'LOGIN', payload: {id: 1, name: 'Ivan Artamonov'}});
-    } else {
-      throw new Error('Invalid credentials');
+      throw new Error('Unknown error occurred');
     }
   }, []);
 
@@ -85,18 +84,31 @@ export const AuthProvider = ({children}: AuthProviderProps) => {
     dispatch({type: 'LOGOUT'});
   }, []);
 
-  const register = useCallback(() => {
-    // In a production app, we need to send user data to server and get a token
-    // We will also need to handle errors if sign up failed
-    // After getting token, we need to persist the token using `SecureStore`
-    // In the example, we'll use a dummy token
+  const register = useCallback(async (data: RegUserData) => {
+    // We need to save the Token in some Secure storage
+    try {
+      const token = await registerUser(data);
+      dispatch({type: 'LOGIN', payload: token});
+    } catch (error) {
+      if (error instanceof ApiError) {
+        if (error.status === 422) {
+          throw error;
+        } else {
+          console.error('API error:', error.data);
+        }
+      } else if (error instanceof Error) {
+        console.error('Unexpected error:', error.message);
+      } else {
+        console.error('An error occurred');
+      }
 
-    dispatch({type: 'LOGIN', payload: {id: 1, name: 'John Doe'}});
+      throw new Error('Unknown error occurred');
+    }
   }, []);
 
   const authContext = useMemo(
     () => ({
-      user: state.user,
+      token: state.token,
       isAuthenticated: state.isAuthenticated,
       login: login,
       logout: logout,

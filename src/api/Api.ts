@@ -7,7 +7,16 @@ export const apiRequest = async <T>(
   const response = await fetch(config.API_URL + endpoint, options);
 
   if (!response.ok) {
-    throw new Error('Network response was not ok');
+    let errorData;
+    try {
+      errorData = await response.json();
+    } catch (e) {
+      console.error(e);
+      throw new Error(
+        'Network response was not ok and error data could not be parsed',
+      );
+    }
+    throw new ApiError(response.status, errorData);
   }
 
   const data = await response.json();
@@ -31,3 +40,14 @@ export const apiPost = async <T>(
     body: JSON.stringify(data),
   });
 };
+
+export class ApiError extends Error {
+  status: number;
+  data: any;
+
+  constructor(status: number, data: any) {
+    super(data.message || 'API Error');
+    this.status = status;
+    this.data = data;
+  }
+}

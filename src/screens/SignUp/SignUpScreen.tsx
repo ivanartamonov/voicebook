@@ -6,22 +6,29 @@ import {ScreenProps} from '../../navigation/StackNavigator.tsx';
 import Pressable from '../../components/Pressable.tsx';
 import TextInput from '../../components/TextInput.tsx';
 import {useAuth} from '../../contexts/AuthContext.tsx';
-import {ApiError} from '../../api/Api.ts';
 
-type SignInProps = ScreenProps<'SignIn'>;
+type SignUpProps = ScreenProps<'SignUp'>;
 
-function SignInScreen({navigation}: SignInProps): React.JSX.Element {
+function SignUpScreen({navigation}: SignUpProps): React.JSX.Element {
   const {theme} = useTheme();
-  const {login} = useAuth();
+  const {register} = useAuth();
   const styles = styling(theme);
   const [email, setEmail] = useState('');
+  const [name, setName] = useState('');
   const [password, setPassword] = useState('');
+  const [passwordConfirmation, setPasswordConfirmation] = useState('');
 
-  const signIn = async () => {
+  const signUp = () => {
     try {
-      await login({email: email, password: password});
+      register({
+        email: email,
+        name: name,
+        password: password,
+        password_confirmation: passwordConfirmation,
+        agree: true,
+      });
     } catch (error) {
-      if (error instanceof ApiError) {
+      if (error instanceof Error) {
         Alert.alert(error.message);
       } else {
         Alert.alert('An error occurred');
@@ -32,7 +39,16 @@ function SignInScreen({navigation}: SignInProps): React.JSX.Element {
   return (
     <SafeAreaView>
       <View style={styles.container}>
-        <Text style={styles.title}>Sign In</Text>
+        <Text style={styles.title}>Registration</Text>
+        <TextInput
+          placeholder="Name"
+          style={styles.input}
+          defaultValue={name}
+          value={name}
+          onChangeText={setName}
+          autoComplete="name"
+          textContentType="name"
+        />
         <TextInput
           placeholder="Email"
           style={styles.input}
@@ -51,16 +67,23 @@ function SignInScreen({navigation}: SignInProps): React.JSX.Element {
           defaultValue={password}
           value={password}
           onChangeText={setPassword}
-          autoComplete="password"
-          textContentType="password"
         />
-        <Pressable onPress={signIn} style={styles.button}>
-          <Text style={styles.buttonText}>Sign In</Text>
+        <TextInput
+          placeholder="Confirm Password"
+          secureTextEntry={true}
+          style={styles.input}
+          defaultValue={passwordConfirmation}
+          value={passwordConfirmation}
+          onChangeText={setPasswordConfirmation}
+        />
+        <Pressable onPress={signUp} style={styles.button}>
+          <Text style={styles.buttonText}>Register</Text>
         </Pressable>
         <Pressable
-          onPress={() => navigation.navigate('SignUp')}
+          onPress={() => navigation.navigate('SignIn')}
           style={styles.registerButton}>
-          <Text style={styles.buttonText}>Register</Text>
+          <Text style={styles.buttonTextSoft}>Already have an account?</Text>
+          <Text style={styles.buttonText}>Log in</Text>
         </Pressable>
       </View>
     </SafeAreaView>
@@ -100,6 +123,12 @@ const styling = (theme: Theme) =>
       padding: 10,
       marginTop: 20,
     },
+    buttonTextSoft: {
+      color: theme.textSoft,
+      fontSize: 16,
+      fontWeight: '500',
+      textAlign: 'center',
+    },
   });
 
-export default SignInScreen;
+export default SignUpScreen;
