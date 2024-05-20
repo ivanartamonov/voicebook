@@ -16,7 +16,15 @@ export const apiRequest = async <T>(
         'Network response was not ok and error data could not be parsed',
       );
     }
-    throw new ApiError(response.status, errorData);
+
+    switch (errorData?.error_type) {
+      case 'validation':
+        throw new ApiValidationError(response.status, errorData);
+      case 'common':
+        throw new ApiCommonError(response.status, errorData);
+      default:
+        throw new ApiError(response.status, errorData);
+    }
   }
 
   const data = await response.json();
@@ -51,3 +59,7 @@ export class ApiError extends Error {
     this.data = data;
   }
 }
+
+export class ApiValidationError extends ApiError {}
+
+export class ApiCommonError extends ApiError {}
