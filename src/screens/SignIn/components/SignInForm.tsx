@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import TextInput from '../../../components/TextInput.tsx';
 import Pressable from '../../../components/Pressable.tsx';
 import {Alert, StyleSheet, Text} from 'react-native';
@@ -13,7 +13,7 @@ import InputError from '../../../components/InputError.tsx';
 const SignInForm = () => {
   const {login} = useAuth();
   const {theme} = useTheme();
-  const styles = styling(theme);
+  const styles = useMemo(() => styling(theme), [theme]);
   const {
     control,
     handleSubmit,

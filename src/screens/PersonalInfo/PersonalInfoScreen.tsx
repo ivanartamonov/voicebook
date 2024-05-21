@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import {Alert, SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import {useTheme} from '../../contexts/ThemeContext.tsx';
 import {Theme} from '../../constants/theme.ts';
@@ -14,7 +14,7 @@ function PersonalInfoScreen({
   navigation,
 }: PersonalInfoProps): React.JSX.Element {
   const {theme} = useTheme();
-  const styles = styling(theme);
+  const styles = useMemo(() => styling(theme), [theme]);
   const {logout} = useAuth();
 
   const handleDeleteAccount = () => {

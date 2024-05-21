@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import {useTheme} from '../../contexts/ThemeContext.tsx';
 import {Theme} from '../../constants/theme.ts';
@@ -10,7 +10,7 @@ type SignInProps = ScreenProps<'SignIn'>;
 
 function SignInScreen({navigation}: SignInProps): React.JSX.Element {
   const {theme} = useTheme();
-  const styles = styling(theme);
+  const styles = useMemo(() => styling(theme), [theme]);
 
   return (
     <SafeAreaView>

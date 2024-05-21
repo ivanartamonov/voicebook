@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useMemo} from 'react';
 import {Linking, SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import {ScreenProps} from '../../navigation/TabNavigator.tsx';
 import {useTheme} from '../../contexts/ThemeContext.tsx';
@@ -11,7 +11,7 @@ type ProfileProps = ScreenProps<'Profile'>;
 
 function ProfileScreen({navigation}: ProfileProps): React.JSX.Element {
   const {theme} = useTheme();
-  const styles = styling(theme);
+  const styles = useMemo(() => styling(theme), [theme]);
 
   const openWebsite = useCallback(async () => {
     await Linking.openURL(config.WEB_URL);

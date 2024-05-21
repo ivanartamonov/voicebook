@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {
   ActivityIndicator,
   SafeAreaView,
@@ -19,8 +19,7 @@ function HomeScreen({}: HomeProps): React.JSX.Element {
   const {theme} = useTheme();
   const [loading, setLoading] = useState(false);
   const [widgets, setWidgets] = useState<Widget[]>([]);
-
-  const styles = styling(theme);
+  const styles = useMemo(() => styling(theme), [theme]);
 
   useEffect(() => {
     setLoading(true);

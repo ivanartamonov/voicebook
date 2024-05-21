@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useMemo, useState} from 'react';
 import {
   Image,
   ImageBackground,
@@ -28,7 +28,7 @@ function BookScreen({navigation, route}: BookScreenProps): React.JSX.Element {
   const {theme} = useTheme();
   const {startPlaying} = usePlayer();
   const [isLoading, setIsLoading] = useState(false);
-  const styles = styling(theme);
+  const styles = useMemo(() => styling(theme), [theme]);
 
   const handleListen = () => {
     setIsLoading(true);
