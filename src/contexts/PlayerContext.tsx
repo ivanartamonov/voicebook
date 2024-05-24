@@ -7,7 +7,7 @@ import React, {
 } from 'react';
 import {PlayerWindowState, PlayTask} from '../types/player.ts';
 import {Book, Chapter} from '../types/types.ts';
-import TrackPlayer, {RepeatMode, Track} from 'react-native-track-player';
+import TrackPlayer, {Track} from 'react-native-track-player';
 
 type PlayerContextType = {
   windowState: PlayerWindowState;
@@ -50,11 +50,11 @@ export const PlayerProvider = ({children}: ThemeProviderProps) => {
 
     const tracks: Track[] = [];
 
-    playTask.chapters.forEach(chapter => {
+    playTask.chapters.forEach(ch => {
       tracks.push({
-        id: chapter.id,
-        url: chapter.url,
-        title: chapter.title,
+        id: ch.id,
+        url: ch.url,
+        title: ch.title,
         artist: playTask.book.author.name,
         artwork: playTask.book.cover,
       });
@@ -63,7 +63,6 @@ export const PlayerProvider = ({children}: ThemeProviderProps) => {
     await TrackPlayer.reset();
     await TrackPlayer.setQueue(tracks);
     await TrackPlayer.play();
-    await TrackPlayer.setRepeatMode(RepeatMode.Off);
     setIsLoading(false);
   }, []);
 

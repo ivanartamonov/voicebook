@@ -1,4 +1,8 @@
-import TrackPlayer, {RepeatMode} from 'react-native-track-player';
+import TrackPlayer, {
+  Capability,
+  RatingType,
+  RepeatMode,
+} from 'react-native-track-player';
 import {useEffect, useRef} from 'react';
 
 const setupPlayer = async () => {
@@ -6,7 +10,17 @@ const setupPlayer = async () => {
     maxCacheSize: 1024 * 10, // 10 mb
   });
 
-  await TrackPlayer.setRepeatMode(RepeatMode.Queue);
+  await TrackPlayer.updateOptions({
+    ratingType: RatingType.Heart,
+    capabilities: [
+      Capability.Play,
+      Capability.Pause,
+      Capability.SkipToNext,
+      Capability.SkipToPrevious,
+    ],
+  });
+
+  await TrackPlayer.setRepeatMode(RepeatMode.Off);
 };
 
 export const useSetupTrackPlayer = ({onLoad}: {onLoad?: () => void}) => {
