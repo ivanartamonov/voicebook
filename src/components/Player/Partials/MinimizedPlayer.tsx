@@ -8,6 +8,7 @@ import {Theme} from '../../../constants/theme.ts';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import {Book, Chapter} from '../../../types/types.ts';
 import Pressable from '../../Pressable.tsx';
+import {PlayPauseButton} from './PlayerControls.tsx';
 
 type Props = {
   book: Book;
@@ -53,11 +54,7 @@ const MinimizedPlayer = ({book, chapter}: Props) => {
           <Text style={styles.bookTitle}>{book.title}</Text>
           <Text style={styles.chapterTitle}>{chapter.title} (1/12)</Text>
         </View>
-        <Pressable
-          style={styles.iconButton}
-          onPress={() => console.log('Start/Stop')}>
-          <FontAwesome6 name="play" size={22} color={theme.text} />
-        </Pressable>
+        <PlayPauseButton style={styles.iconButton} iconSize={22} />
         <Pressable style={styles.iconButton} onPress={closeWindow}>
           <FontAwesome6 name="xmark" size={22} color={theme.text} />
         </Pressable>
