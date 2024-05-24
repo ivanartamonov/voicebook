@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {
   ActivityIndicator,
   FlatList,
@@ -26,8 +26,8 @@ const ChaptersList = ({curBook, curChapter}: Props) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [chapters, setChapters] = useState<Chapter[]>([]);
   const [loading, setLoading] = useState(false);
-  const styles = styling(theme);
-  const {setChapter} = usePlayer();
+  const styles = useMemo(() => styling(theme), [theme]);
+  const {selectChapter} = usePlayer();
 
   useEffect(() => {
     setLoading(true);
@@ -43,7 +43,7 @@ const ChaptersList = ({curBook, curChapter}: Props) => {
   }, [curBook]);
 
   const onSelect = (chapter: Chapter) => {
-    setChapter(chapter);
+    selectChapter(chapter);
     setModalVisible(!modalVisible);
   };
 

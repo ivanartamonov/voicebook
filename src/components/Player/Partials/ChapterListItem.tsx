@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import {Chapter} from '../../../types/types.ts';
 import {StyleSheet, Text} from 'react-native';
 import {useTheme} from '../../../contexts/ThemeContext.tsx';
@@ -14,7 +14,7 @@ type Props = {
 
 const ChapterListItem = ({chapter, onSelect, isCurrent}: Props) => {
   const {theme} = useTheme();
-  const styles = styling(theme, isCurrent);
+  const styles = useMemo(() => styling(theme, isCurrent), [theme, isCurrent]);
 
   return (
     <Pressable style={styles.chapterItem} onPress={() => onSelect(chapter)}>
