@@ -16,7 +16,7 @@ import {Theme} from '../../../constants/theme.ts';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import ChaptersList from './ChaptersList.tsx';
-import {Book, Chapter} from '../../../types/types.ts';
+import {Book} from '../../../types/types.ts';
 import Pressable from '../../Pressable.tsx';
 import {
   PlayPauseButton,
@@ -27,10 +27,9 @@ import PlayProgress from './PlayProgress.tsx';
 
 type Props = {
   book: Book;
-  chapter: Chapter;
 };
 
-const FullSizePlayer = ({book, chapter}: Props) => {
+const FullSizePlayer = ({book}: Props) => {
   const {theme} = useTheme();
   const {setWindowState} = usePlayer();
 
@@ -76,7 +75,7 @@ const FullSizePlayer = ({book, chapter}: Props) => {
       </ScrollView>
 
       <View style={styles.fullPlayer}>
-        <ChaptersList curChapter={chapter} curBook={book} />
+        <ChaptersList />
         <PlayProgress />
         <View style={styles.controls}>
           <SkipToPrevButton

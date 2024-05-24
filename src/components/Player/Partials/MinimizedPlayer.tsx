@@ -6,22 +6,22 @@ import {usePlayer} from '../../../contexts/PlayerContext.tsx';
 import {useNavigation, useNavigationState} from '@react-navigation/native';
 import {Theme} from '../../../constants/theme.ts';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
-import {Book, Chapter} from '../../../types/types.ts';
+import {Book} from '../../../types/types.ts';
 import Pressable from '../../Pressable.tsx';
 import {PlayPauseButton} from './PlayerControls.tsx';
+import {useActiveTrack} from 'react-native-track-player';
 
 type Props = {
   book: Book;
-  chapter: Chapter;
 };
 
-const MinimizedPlayer = ({book, chapter}: Props) => {
+const MinimizedPlayer = ({book}: Props) => {
   const {theme} = useTheme();
   const {windowState, setWindowState, closeWindow} = usePlayer();
   const navigation = useNavigation();
   const navigationState = useNavigationState(state => state);
   const [hasTabs, setHasTabs] = useState(false);
-
+  const activeTrack = useActiveTrack();
   const styles = styling(theme, hasTabs);
 
   useEffect(() => {
@@ -52,7 +52,7 @@ const MinimizedPlayer = ({book, chapter}: Props) => {
         <Image source={{uri: book.cover}} style={styles.bookCover} />
         <View style={styles.info}>
           <Text style={styles.bookTitle}>{book.title}</Text>
-          <Text style={styles.chapterTitle}>{chapter.title} (1/12)</Text>
+          <Text style={styles.chapterTitle}>{activeTrack?.title} (1/12)</Text>
         </View>
         <PlayPauseButton style={styles.iconButton} iconSize={22} />
         <Pressable style={styles.iconButton} onPress={closeWindow}>

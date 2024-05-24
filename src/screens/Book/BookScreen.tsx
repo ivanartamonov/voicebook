@@ -18,7 +18,7 @@ import {StatusBar} from 'react-native';
 import {buildBookUrl, tagsToString} from '../../utils/BookHelper.ts';
 import ListenButton from './components/ListenButton.tsx';
 import {usePlayer} from '../../contexts/PlayerContext.tsx';
-import {getFirstBookChapter} from '../../api/Chapter.ts';
+import {getChapters} from '../../api/Chapter.ts';
 import Pressable from '../../components/Pressable.tsx';
 
 type BookScreenProps = ScreenProps<'BookDetails'>;
@@ -30,21 +30,20 @@ function BookScreen({navigation, route}: BookScreenProps): React.JSX.Element {
   const [isLoading, setIsLoading] = useState(false);
   const styles = useMemo(() => styling(theme), [theme]);
 
-  const handleListen = useCallback(() => {
+  const handleListen = useCallback(async () => {
     setIsLoading(true);
 
     // TODO: check for existing bookmark
-    // if exists, start playing from the bookmark
-    // if not, start playing from the first chapter
-    getFirstBookChapter(book.id)
-      .then(chapter => {
-        startPlaying({book, chapter});
-        setIsLoading(false);
-      })
-      .catch(error => {
-        console.error('Failed to fetch first chapter:', error);
-        setIsLoading(false);
-      });
+
+    try {
+      const chapters = await getChapters(book.id);
+      startPlaying({book, chapters});
+      setIsLoading(false);
+    } catch (error) {
+      console.error('Failed to fetch chapters:', error);
+      setIsLoading(false);
+      return;
+    }
   }, [startPlaying, book, setIsLoading]);
 
   const handleShare = useCallback(async () => {

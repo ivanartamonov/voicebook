@@ -1,46 +1,20 @@
-import React, {useEffect, useMemo, useState} from 'react';
-import {
-  ActivityIndicator,
-  FlatList,
-  Modal,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import React, {useMemo, useState} from 'react';
+import {FlatList, Modal, StyleSheet, Text, View} from 'react-native';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import {useTheme} from '../../../contexts/ThemeContext.tsx';
 import {Theme} from '../../../constants/theme.ts';
-import {getChapters} from '../../../api/Chapter.ts';
 import ChapterListItem from './ChapterListItem.tsx';
-import {Book, Chapter} from '../../../types/types.ts';
+import {Chapter} from '../../../types/types.ts';
 import {usePlayer} from '../../../contexts/PlayerContext.tsx';
 import Pressable from '../../Pressable.tsx';
+import {useActiveTrack} from 'react-native-track-player';
 
-type Props = {
-  curChapter: Chapter;
-  curBook: Book;
-};
-
-const ChaptersList = ({curBook, curChapter}: Props) => {
+const ChaptersList = () => {
   const {theme} = useTheme();
   const [modalVisible, setModalVisible] = useState(false);
-  const [chapters, setChapters] = useState<Chapter[]>([]);
-  const [loading, setLoading] = useState(false);
   const styles = useMemo(() => styling(theme), [theme]);
-  const {selectChapter} = usePlayer();
-
-  useEffect(() => {
-    setLoading(true);
-    getChapters(curBook.id)
-      .then(fetchedChapters => {
-        setChapters(fetchedChapters);
-        setLoading(false);
-      })
-      .catch(error => {
-        console.error('Failed to fetch books:', error);
-        setLoading(false);
-      });
-  }, [curBook]);
+  const {selectChapter, chapters} = usePlayer();
+  const activeTrack = useActiveTrack();
 
   const onSelect = (chapter: Chapter) => {
     selectChapter(chapter);
@@ -52,7 +26,7 @@ const ChaptersList = ({curBook, curChapter}: Props) => {
       <Pressable
         style={styles.chaptersButton}
         onPress={() => setModalVisible(!modalVisible)}>
-        <Text style={styles.chaptersButtonText}>{curChapter.title}</Text>
+        <Text style={styles.chaptersButtonText}>{activeTrack?.title}</Text>
         <FontAwesome6 name="list" size={16} color={theme.textSoft} />
       </Pressable>
       <Modal
@@ -74,22 +48,18 @@ const ChaptersList = ({curBook, curChapter}: Props) => {
               <FontAwesome6 name="xmark" size={24} color={theme.text} />
             </Pressable>
             <Text style={styles.heading}>Зміст</Text>
-            {loading ? (
-              <ActivityIndicator size="large" style={styles.loader} />
-            ) : (
-              <FlatList
-                data={chapters}
-                contentContainerStyle={styles.chaptersList}
-                renderItem={({item}) => (
-                  <ChapterListItem
-                    chapter={item}
-                    onSelect={onSelect}
-                    isCurrent={curChapter.id === item.id}
-                  />
-                )}
-                keyExtractor={chapter => chapter.id}
-              />
-            )}
+            <FlatList
+              data={chapters}
+              contentContainerStyle={styles.chaptersList}
+              renderItem={({item}) => (
+                <ChapterListItem
+                  chapter={item}
+                  onSelect={onSelect}
+                  isCurrent={activeTrack?.url === item.url}
+                />
+              )}
+              keyExtractor={chapter => chapter.id}
+            />
           </View>
         </View>
       </Modal>

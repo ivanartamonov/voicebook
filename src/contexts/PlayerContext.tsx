@@ -7,13 +7,14 @@ import React, {
 } from 'react';
 import {PlayerWindowState, PlayTask} from '../types/player.ts';
 import {Book, Chapter} from '../types/types.ts';
-import TrackPlayer, {Track} from 'react-native-track-player';
+import TrackPlayer, {RepeatMode, Track} from 'react-native-track-player';
 
 type PlayerContextType = {
   windowState: PlayerWindowState;
   setWindowState: React.Dispatch<React.SetStateAction<PlayerWindowState>>;
   book: Book | undefined;
   chapter: Chapter | undefined;
+  chapters: Chapter[];
   setBook: React.Dispatch<React.SetStateAction<Book | undefined>>;
   setChapter: React.Dispatch<React.SetStateAction<Chapter | undefined>>;
   selectChapter: (newChapter: Chapter) => void;
@@ -35,53 +36,56 @@ export const PlayerProvider = ({children}: ThemeProviderProps) => {
   );
   const [book, setBook] = useState<Book | undefined>(undefined);
   const [chapter, setChapter] = useState<Chapter | undefined>(undefined);
+  const [chapters, setChapters] = useState<Chapter[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const startPlaying = useCallback(async (playTask: PlayTask) => {
+    const currentChapter = playTask.chapters[0];
+
     setIsLoading(true);
     setBook(playTask.book);
-    setChapter(playTask.chapter);
+    setChapters(playTask.chapters);
+    setChapter(currentChapter);
     setWindowState(PlayerWindowState.Normal);
 
-    const track: Track = {
-      id: playTask.chapter.id,
-      url: playTask.chapter.url,
-      title: playTask.chapter.title,
-      artist: playTask.book.author.name,
-      artwork: playTask.book.cover,
-    };
+    const tracks: Track[] = [];
 
-    await TrackPlayer.load(track);
+    playTask.chapters.forEach(chapter => {
+      tracks.push({
+        id: chapter.id,
+        url: chapter.url,
+        title: chapter.title,
+        artist: playTask.book.author.name,
+        artwork: playTask.book.cover,
+      });
+    });
+
+    await TrackPlayer.reset();
+    await TrackPlayer.setQueue(tracks);
     await TrackPlayer.play();
+    await TrackPlayer.setRepeatMode(RepeatMode.Off);
     setIsLoading(false);
   }, []);
 
-  const stopPlaying = useCallback(() => {
-    TrackPlayer.stop();
+  const stopPlaying = useCallback(async () => {
+    await TrackPlayer.stop();
   }, []);
 
   const selectChapter = useCallback(
     async (newChapter: Chapter) => {
       setChapter(newChapter);
-
-      const track: Track = {
-        id: newChapter.id,
-        url: newChapter.url,
-        title: newChapter.title,
-        artist: book?.author.name,
-        artwork: book?.cover,
-      };
-
-      await TrackPlayer.load(track);
+      const chapterIndex = chapters?.findIndex(c => c.id === newChapter.id);
+      await TrackPlayer.skip(chapterIndex);
       await TrackPlayer.play();
     },
-    [book],
+    [chapters],
   );
 
-  const closeWindow = () => {
+  const closeWindow = useCallback(async () => {
     setWindowState(PlayerWindowState.Closed);
     setBook(undefined);
-  };
+    await stopPlaying();
+  }, [stopPlaying]);
 
   return (
     <PlayerContext.Provider
@@ -90,6 +94,7 @@ export const PlayerProvider = ({children}: ThemeProviderProps) => {
         setWindowState,
         book,
         chapter,
+        chapters,
         setBook,
         setChapter,
         selectChapter,
