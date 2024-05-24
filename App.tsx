@@ -8,10 +8,19 @@ import {ThemeProvider} from './src/contexts/ThemeContext.tsx';
 import {PlayerProvider} from './src/contexts/PlayerContext.tsx';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import {AuthProvider} from './src/contexts/AuthContext.tsx';
+import {useSetupTrackPlayer} from './src/hooks/useSetupTrackPlayer.ts';
+import {useLogTrackPlayerState} from './src/hooks/useLogTrackPlayerState.ts';
 
 const queryClient = new QueryClient();
 
 function App(): React.JSX.Element {
+  useSetupTrackPlayer({
+    onLoad: () => {
+      console.log('TrackPlayer is ready');
+    },
+  });
+  useLogTrackPlayerState();
+
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
