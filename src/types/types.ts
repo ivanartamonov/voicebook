@@ -65,3 +65,10 @@ export interface Widget {
   title: string;
   books: Book[];
 }
+
+export interface User {
+  id: number;
+  name: string;
+}
+
+export type ApiToken = string;

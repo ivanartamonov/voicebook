@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import {Alert, SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import {useTheme} from '../../contexts/ThemeContext.tsx';
 import {Theme} from '../../constants/theme.ts';
@@ -6,6 +6,7 @@ import {ScreenProps} from '../../navigation/StackNavigator.tsx';
 import ScreenHeader from '../../components/ScreenHeader.tsx';
 import Pressable from '../../components/Pressable.tsx';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
+import {useAuth} from '../../contexts/AuthContext.tsx';
 
 type PersonalInfoProps = ScreenProps<'PersonalInfo'>;
 
@@ -13,7 +14,8 @@ function PersonalInfoScreen({
   navigation,
 }: PersonalInfoProps): React.JSX.Element {
   const {theme} = useTheme();
-  const styles = styling(theme);
+  const styles = useMemo(() => styling(theme), [theme]);
+  const {logout} = useAuth();
 
   const handleDeleteAccount = () => {
     console.log('Account Deleted!');
@@ -31,6 +33,10 @@ function PersonalInfoScreen({
           </Text>
           <Text style={styles.text}>i.o.arta*****@gmail.com</Text>
         </View>
+        <Pressable style={styles.logoutButton} onPress={logout}>
+          <Text style={styles.deleteButtonText}>Вийти</Text>
+        </Pressable>
+
         <Pressable
           style={styles.deleteButton}
           onPress={() =>
@@ -78,6 +84,14 @@ const styling = (theme: Theme) =>
       color: theme.textMuted,
       fontSize: 14,
       paddingVertical: 5,
+    },
+    logoutButton: {
+      paddingVertical: 10,
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: theme.backgroundSoft,
+      borderRadius: 10,
+      marginVertical: 10,
     },
     deleteButton: {
       paddingVertical: 10,

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useCallback, useMemo, useState} from 'react';
 import {
   Image,
   ImageBackground,
@@ -28,9 +28,9 @@ function BookScreen({navigation, route}: BookScreenProps): React.JSX.Element {
   const {theme} = useTheme();
   const {startPlaying} = usePlayer();
   const [isLoading, setIsLoading] = useState(false);
-  const styles = styling(theme);
+  const styles = useMemo(() => styling(theme), [theme]);
 
-  const handleListen = () => {
+  const handleListen = useCallback(() => {
     setIsLoading(true);
 
     // TODO: check for existing bookmark
@@ -45,9 +45,9 @@ function BookScreen({navigation, route}: BookScreenProps): React.JSX.Element {
         console.error('Failed to fetch first chapter:', error);
         setIsLoading(false);
       });
-  };
+  }, [startPlaying, book, setIsLoading]);
 
-  const handleShare = async () => {
+  const handleShare = useCallback(async () => {
     try {
       const result = await Share.share({
         message: book.title,
@@ -65,7 +65,7 @@ function BookScreen({navigation, route}: BookScreenProps): React.JSX.Element {
     } catch (error: any) {
       console.error(error.message);
     }
-  };
+  }, [book]);
 
   return (
     <>

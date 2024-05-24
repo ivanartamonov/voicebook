@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useMemo, useState} from 'react';
 import {Appearance, SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import {useTheme} from '../../contexts/ThemeContext.tsx';
 import {Theme} from '../../constants/theme.ts';
@@ -10,7 +10,7 @@ type SettingsProps = ScreenProps<'Settings'>;
 
 function SettingsScreen({navigation}: SettingsProps): React.JSX.Element {
   const {theme, isDark, setTheme, themeMode} = useTheme();
-  const styles = styling(theme);
+  const styles = useMemo(() => styling(theme), [theme]);
   const [useSystemTheme, setUseSystemTheme] = useState(themeMode === null);
 
   const toggleSystemTheme = () => {
