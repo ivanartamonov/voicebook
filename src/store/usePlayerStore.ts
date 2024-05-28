@@ -27,7 +27,12 @@ export const usePlayerStore = create<PlayerState>((set, get) => ({
   maximizeWindow: () => set({windowState: PlayerWindowState.Normal}),
   closeWindow: () => {
     const {stopPlaying} = get();
-    set({windowState: PlayerWindowState.Closed});
+    set({
+      windowState: PlayerWindowState.Closed,
+      book: undefined,
+      chapters: [],
+      chapter: undefined,
+    });
     stopPlaying();
   },
   startPlaying: async (playTask: PlayTask) => {
