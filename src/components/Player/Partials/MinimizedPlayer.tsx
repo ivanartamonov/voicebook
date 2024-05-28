@@ -1,8 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {PlayerWindowState} from '../../../types/player.ts';
 import {useTheme} from '../../../contexts/ThemeContext.tsx';
-import {usePlayer} from '../../../contexts/PlayerContext.tsx';
 import {useNavigation, useNavigationState} from '@react-navigation/native';
 import {Theme} from '../../../constants/theme.ts';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
@@ -10,6 +8,7 @@ import {Book} from '../../../types/types.ts';
 import Pressable from '../../Pressable.tsx';
 import {PlayPauseButton} from './PlayerControls.tsx';
 import {useActiveTrack} from 'react-native-track-player';
+import {usePlayerStore} from '../../../store/usePlayerStore.ts';
 
 type Props = {
   book: Book;
@@ -17,7 +16,7 @@ type Props = {
 
 const MinimizedPlayer = ({book}: Props) => {
   const {theme} = useTheme();
-  const {windowState, setWindowState, closeWindow} = usePlayer();
+  const {maximizeWindow, closeWindow} = usePlayerStore();
   const navigation = useNavigation();
   const navigationState = useNavigationState(state => state);
   const [hasTabs, setHasTabs] = useState(false);
@@ -38,17 +37,9 @@ const MinimizedPlayer = ({book}: Props) => {
     return navigation.addListener('state', determineIfHasTabs);
   }, [navigation, navigationState]);
 
-  function togglePlayer() {
-    if (windowState === PlayerWindowState.Minimized) {
-      setWindowState(PlayerWindowState.Normal);
-    } else {
-      setWindowState(PlayerWindowState.Minimized);
-    }
-  }
-
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={togglePlayer} style={styles.minimizedBar}>
+      <TouchableOpacity onPress={maximizeWindow} style={styles.minimizedBar}>
         <Image source={{uri: book.cover}} style={styles.bookCover} />
         <View style={styles.info}>
           <Text style={styles.bookTitle}>{book.title}</Text>

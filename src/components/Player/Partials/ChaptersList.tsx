@@ -5,15 +5,15 @@ import {useTheme} from '../../../contexts/ThemeContext.tsx';
 import {Theme} from '../../../constants/theme.ts';
 import ChapterListItem from './ChapterListItem.tsx';
 import {Chapter} from '../../../types/types.ts';
-import {usePlayer} from '../../../contexts/PlayerContext.tsx';
 import Pressable from '../../Pressable.tsx';
 import {useActiveTrack} from 'react-native-track-player';
+import {usePlayerStore} from '../../../store/usePlayerStore.ts';
 
 const ChaptersList = () => {
   const {theme} = useTheme();
   const [modalVisible, setModalVisible] = useState(false);
   const styles = useMemo(() => styling(theme), [theme]);
-  const {selectChapter, chapters} = usePlayer();
+  const {selectChapter, chapters} = usePlayerStore();
   const activeTrack = useActiveTrack();
 
   const onSelect = (chapter: Chapter) => {

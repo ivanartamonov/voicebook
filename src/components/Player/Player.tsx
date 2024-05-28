@@ -1,11 +1,11 @@
 import React from 'react';
-import {usePlayer} from '../../contexts/PlayerContext.tsx';
 import {PlayerWindowState} from '../../types/player.ts';
 import MinimizedPlayer from './Partials/MinimizedPlayer.tsx';
 import FullSizePlayer from './Partials/FullSizePlayer.tsx';
+import {usePlayerStore} from '../../store/usePlayerStore.ts';
 
 const Player = () => {
-  const {windowState, book} = usePlayer();
+  const {windowState, book} = usePlayerStore();
 
   if (!book) {
     return null;

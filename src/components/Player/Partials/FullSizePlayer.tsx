@@ -9,9 +9,7 @@ import {
   Text,
   View,
 } from 'react-native';
-import {PlayerWindowState} from '../../../types/player.ts';
 import {useTheme} from '../../../contexts/ThemeContext.tsx';
-import {usePlayer} from '../../../contexts/PlayerContext.tsx';
 import {Theme} from '../../../constants/theme.ts';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -24,6 +22,7 @@ import {
   SkipToPrevButton,
 } from './PlayerControls.tsx';
 import PlayProgress from './PlayProgress.tsx';
+import {usePlayerStore} from '../../../store/usePlayerStore.ts';
 
 type Props = {
   book: Book;
@@ -31,7 +30,7 @@ type Props = {
 
 const FullSizePlayer = ({book}: Props) => {
   const {theme} = useTheme();
-  const {setWindowState} = usePlayer();
+  const {minimizeWindow} = usePlayerStore();
 
   const styles = useMemo(() => styling(theme), [theme]);
 
@@ -46,8 +45,7 @@ const FullSizePlayer = ({book}: Props) => {
         <ImageBackground source={{uri: book.cover}} style={styles.coverBg}>
           <View style={styles.overlay} />
           <SafeAreaView>
-            <Pressable
-              onPress={() => setWindowState(PlayerWindowState.Minimized)}>
+            <Pressable onPress={minimizeWindow}>
               <FontAwesome6
                 name="chevron-down"
                 size={24}

@@ -7,7 +7,7 @@ import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import Pressable from '../../Pressable.tsx';
 import React, {useEffect, useState} from 'react';
 import {useTheme} from '../../../contexts/ThemeContext.tsx';
-import {usePlayer} from '../../../contexts/PlayerContext.tsx';
+import {usePlayerStore} from '../../../store/usePlayerStore.ts';
 
 type PlayerButtonProps = {
   style?: ViewStyle | ViewStyle[];
@@ -35,7 +35,7 @@ export const SkipToNextButton = ({style, iconSize}: PlayerButtonProps) => {
   const {theme} = useTheme();
   const [isActive, setIsActive] = useState(false);
   const activeTrack = useActiveTrack();
-  const {chapters} = usePlayer();
+  const {chapters} = usePlayerStore();
 
   useEffect(() => {
     setIsActive(activeTrack?.url === chapters[chapters.length - 1].url);
@@ -54,7 +54,7 @@ export const SkipToPrevButton = ({style, iconSize}: PlayerButtonProps) => {
   const {theme} = useTheme();
   const [isActive, setIsActive] = useState(false);
   const activeTrack = useActiveTrack();
-  const {chapters} = usePlayer();
+  const {chapters} = usePlayerStore();
 
   useEffect(() => {
     setIsActive(activeTrack?.url === chapters[0].url);

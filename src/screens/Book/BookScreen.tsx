@@ -17,16 +17,16 @@ import {useTheme} from '../../contexts/ThemeContext.tsx';
 import {StatusBar} from 'react-native';
 import {buildBookUrl, tagsToString} from '../../utils/BookHelper.ts';
 import ListenButton from './components/ListenButton.tsx';
-import {usePlayer} from '../../contexts/PlayerContext.tsx';
 import {getChapters} from '../../api/Chapter.ts';
 import Pressable from '../../components/Pressable.tsx';
+import {usePlayerStore} from '../../store/usePlayerStore.ts';
 
 type BookScreenProps = ScreenProps<'BookDetails'>;
 
 function BookScreen({navigation, route}: BookScreenProps): React.JSX.Element {
   const {book} = route.params;
   const {theme} = useTheme();
-  const {startPlaying} = usePlayer();
+  const {startPlaying} = usePlayerStore();
   const [isLoading, setIsLoading] = useState(false);
   const styles = useMemo(() => styling(theme), [theme]);
 
