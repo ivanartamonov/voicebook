@@ -1,5 +1,12 @@
-import React, {useMemo, useState} from 'react';
-import {FlatList, Modal, StyleSheet, Text, View} from 'react-native';
+import React, {useCallback, useMemo, useState} from 'react';
+import {
+  FlatList,
+  ListRenderItemInfo,
+  Modal,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import {useTheme} from '../../../contexts/ThemeContext.tsx';
 import {Theme} from '../../../constants/theme.ts';
@@ -9,6 +16,8 @@ import Pressable from '../../Pressable.tsx';
 import {useActiveTrack} from 'react-native-track-player';
 import {usePlayerStore} from '../../../store/usePlayerStore.ts';
 
+const extractKey = (item: Chapter) => item.id;
+
 const ChaptersList = () => {
   const {theme} = useTheme();
   const [modalVisible, setModalVisible] = useState(false);
@@ -16,10 +25,24 @@ const ChaptersList = () => {
   const {selectChapter, chapters} = usePlayerStore();
   const activeTrack = useActiveTrack();
 
-  const onSelect = (chapter: Chapter) => {
-    selectChapter(chapter);
-    setModalVisible(!modalVisible);
-  };
+  const onSelect = useCallback(
+    (chapter: Chapter) => {
+      selectChapter(chapter);
+      setModalVisible(!modalVisible);
+    },
+    [selectChapter, modalVisible],
+  );
+
+  const Item = useCallback(
+    ({item}: ListRenderItemInfo<Chapter>) => (
+      <ChapterListItem
+        chapter={item}
+        onSelect={onSelect}
+        isCurrent={activeTrack?.url === item.url}
+      />
+    ),
+    [onSelect, activeTrack],
+  );
 
   return (
     <>
@@ -51,14 +74,8 @@ const ChaptersList = () => {
             <FlatList
               data={chapters}
               contentContainerStyle={styles.chaptersList}
-              renderItem={({item}) => (
-                <ChapterListItem
-                  chapter={item}
-                  onSelect={onSelect}
-                  isCurrent={activeTrack?.url === item.url}
-                />
-              )}
-              keyExtractor={chapter => chapter.id}
+              renderItem={Item}
+              keyExtractor={extractKey}
             />
           </View>
         </View>
