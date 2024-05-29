@@ -1,7 +1,7 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useMemo, useState} from 'react';
 import {
-  ActivityIndicator,
   FlatList,
+  ListRenderItemInfo,
   Modal,
   StyleSheet,
   Text,
@@ -10,49 +10,46 @@ import {
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import {useTheme} from '../../../contexts/ThemeContext.tsx';
 import {Theme} from '../../../constants/theme.ts';
-import {getChapters} from '../../../api/Chapter.ts';
 import ChapterListItem from './ChapterListItem.tsx';
-import {Book, Chapter} from '../../../types/types.ts';
-import {usePlayer} from '../../../contexts/PlayerContext.tsx';
+import {Chapter} from '../../../types/types.ts';
 import Pressable from '../../Pressable.tsx';
+import {useActiveTrack} from 'react-native-track-player';
+import {usePlayerStore} from '../../../store/usePlayerStore.ts';
 
-type Props = {
-  curChapter: Chapter;
-  curBook: Book;
-};
+const extractKey = (item: Chapter) => item.id;
 
-const ChaptersList = ({curBook, curChapter}: Props) => {
+const ChaptersList = () => {
   const {theme} = useTheme();
   const [modalVisible, setModalVisible] = useState(false);
-  const [chapters, setChapters] = useState<Chapter[]>([]);
-  const [loading, setLoading] = useState(false);
-  const styles = styling(theme);
-  const {setChapter} = usePlayer();
+  const styles = useMemo(() => styling(theme), [theme]);
+  const {selectChapter, chapters} = usePlayerStore();
+  const activeTrack = useActiveTrack();
 
-  useEffect(() => {
-    setLoading(true);
-    getChapters(curBook.id)
-      .then(fetchedChapters => {
-        setChapters(fetchedChapters);
-        setLoading(false);
-      })
-      .catch(error => {
-        console.error('Failed to fetch books:', error);
-        setLoading(false);
-      });
-  }, [curBook]);
+  const onSelect = useCallback(
+    (chapter: Chapter) => {
+      selectChapter(chapter);
+      setModalVisible(!modalVisible);
+    },
+    [selectChapter, modalVisible],
+  );
 
-  const onSelect = (chapter: Chapter) => {
-    setChapter(chapter);
-    setModalVisible(!modalVisible);
-  };
+  const Item = useCallback(
+    ({item}: ListRenderItemInfo<Chapter>) => (
+      <ChapterListItem
+        chapter={item}
+        onSelect={onSelect}
+        isCurrent={activeTrack?.url === item.url}
+      />
+    ),
+    [onSelect, activeTrack],
+  );
 
   return (
     <>
       <Pressable
         style={styles.chaptersButton}
         onPress={() => setModalVisible(!modalVisible)}>
-        <Text style={styles.chaptersButtonText}>{curChapter.title}</Text>
+        <Text style={styles.chaptersButtonText}>{activeTrack?.title}</Text>
         <FontAwesome6 name="list" size={16} color={theme.textSoft} />
       </Pressable>
       <Modal
@@ -74,22 +71,12 @@ const ChaptersList = ({curBook, curChapter}: Props) => {
               <FontAwesome6 name="xmark" size={24} color={theme.text} />
             </Pressable>
             <Text style={styles.heading}>Зміст</Text>
-            {loading ? (
-              <ActivityIndicator size="large" style={styles.loader} />
-            ) : (
-              <FlatList
-                data={chapters}
-                contentContainerStyle={styles.chaptersList}
-                renderItem={({item}) => (
-                  <ChapterListItem
-                    chapter={item}
-                    onSelect={onSelect}
-                    isCurrent={curChapter.id === item.id}
-                  />
-                )}
-                keyExtractor={chapter => chapter.id}
-              />
-            )}
+            <FlatList
+              data={chapters}
+              contentContainerStyle={styles.chaptersList}
+              renderItem={Item}
+              keyExtractor={extractKey}
+            />
           </View>
         </View>
       </Modal>

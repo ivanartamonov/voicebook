@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import {
   Image,
   ImageBackground,
@@ -9,27 +9,30 @@ import {
   Text,
   View,
 } from 'react-native';
-import {PlayerWindowState} from '../../../types/player.ts';
 import {useTheme} from '../../../contexts/ThemeContext.tsx';
-import {usePlayer} from '../../../contexts/PlayerContext.tsx';
 import {Theme} from '../../../constants/theme.ts';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import Slider from '@react-native-community/slider';
 import ChaptersList from './ChaptersList.tsx';
-import {Book, Chapter} from '../../../types/types.ts';
+import {Book} from '../../../types/types.ts';
 import Pressable from '../../Pressable.tsx';
+import {
+  PlayPauseButton,
+  SkipToNextButton,
+  SkipToPrevButton,
+} from './PlayerControls.tsx';
+import PlayProgress from './PlayProgress.tsx';
+import {usePlayerStore} from '../../../store/usePlayerStore.ts';
 
 type Props = {
   book: Book;
-  chapter: Chapter;
 };
 
-const FullSizePlayer = ({book, chapter}: Props) => {
+const FullSizePlayer = ({book}: Props) => {
   const {theme} = useTheme();
-  const {setWindowState} = usePlayer();
+  const {minimizeWindow} = usePlayerStore();
 
-  const styles = styling(theme);
+  const styles = useMemo(() => styling(theme), [theme]);
 
   return (
     <View style={styles.container}>
@@ -42,8 +45,7 @@ const FullSizePlayer = ({book, chapter}: Props) => {
         <ImageBackground source={{uri: book.cover}} style={styles.coverBg}>
           <View style={styles.overlay} />
           <SafeAreaView>
-            <Pressable
-              onPress={() => setWindowState(PlayerWindowState.Minimized)}>
+            <Pressable onPress={minimizeWindow}>
               <FontAwesome6
                 name="chevron-down"
                 size={24}
@@ -71,34 +73,18 @@ const FullSizePlayer = ({book, chapter}: Props) => {
       </ScrollView>
 
       <View style={styles.fullPlayer}>
-        <ChaptersList curChapter={chapter} curBook={book} />
-        <Slider
-          style={styles.slider}
-          minimumValue={0}
-          maximumValue={1}
-          value={0.5}
-          minimumTrackTintColor={theme.text}
-          maximumTrackTintColor={theme.textMuted}
-          thumbTintColor={theme.text}
-        />
-        <View style={styles.timeLabels}>
-          <Text style={styles.timeLabel}>00:00</Text>
-          <Text style={styles.timeLabel}>05:37</Text>
-        </View>
+        <ChaptersList />
+        <PlayProgress />
         <View style={styles.controls}>
-          <Pressable
+          <SkipToPrevButton
             style={[styles.control, styles.controlSmall]}
-            onPress={() => console.log('Prev')}>
-            <FontAwesome6 name="backward-step" size={36} color={theme.text} />
-          </Pressable>
-          <Pressable style={styles.control} onPress={() => console.log('Play')}>
-            <FontAwesome6 name="play" size={48} color={theme.text} />
-          </Pressable>
-          <Pressable
+            iconSize={36}
+          />
+          <PlayPauseButton style={styles.control} iconSize={48} />
+          <SkipToNextButton
             style={[styles.control, styles.controlSmall]}
-            onPress={() => console.log('Next')}>
-            <FontAwesome6 name="forward-step" size={36} color={theme.text} />
-          </Pressable>
+            iconSize={36}
+          />
         </View>
       </View>
     </View>
@@ -214,19 +200,6 @@ const styling = (theme: Theme) =>
     controlSmall: {
       width: 60,
       height: 60,
-    },
-    slider: {
-      width: '100%',
-      height: 40,
-      padding: 0,
-    },
-    timeLabels: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      width: '100%',
-    },
-    timeLabel: {
-      color: theme.textSoft,
     },
   });
 

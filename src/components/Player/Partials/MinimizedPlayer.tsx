@@ -1,26 +1,26 @@
 import React, {useEffect, useState} from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {PlayerWindowState} from '../../../types/player.ts';
 import {useTheme} from '../../../contexts/ThemeContext.tsx';
-import {usePlayer} from '../../../contexts/PlayerContext.tsx';
 import {useNavigation, useNavigationState} from '@react-navigation/native';
 import {Theme} from '../../../constants/theme.ts';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
-import {Book, Chapter} from '../../../types/types.ts';
+import {Book} from '../../../types/types.ts';
 import Pressable from '../../Pressable.tsx';
+import {PlayPauseButton} from './PlayerControls.tsx';
+import {useActiveTrack} from 'react-native-track-player';
+import {usePlayerStore} from '../../../store/usePlayerStore.ts';
 
 type Props = {
   book: Book;
-  chapter: Chapter;
 };
 
-const MinimizedPlayer = ({book, chapter}: Props) => {
+const MinimizedPlayer = ({book}: Props) => {
   const {theme} = useTheme();
-  const {windowState, setWindowState, closeWindow} = usePlayer();
+  const {maximizeWindow, closeWindow} = usePlayerStore();
   const navigation = useNavigation();
   const navigationState = useNavigationState(state => state);
   const [hasTabs, setHasTabs] = useState(false);
-
+  const activeTrack = useActiveTrack();
   const styles = styling(theme, hasTabs);
 
   useEffect(() => {
@@ -37,27 +37,15 @@ const MinimizedPlayer = ({book, chapter}: Props) => {
     return navigation.addListener('state', determineIfHasTabs);
   }, [navigation, navigationState]);
 
-  function togglePlayer() {
-    if (windowState === PlayerWindowState.Minimized) {
-      setWindowState(PlayerWindowState.Normal);
-    } else {
-      setWindowState(PlayerWindowState.Minimized);
-    }
-  }
-
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={togglePlayer} style={styles.minimizedBar}>
+      <TouchableOpacity onPress={maximizeWindow} style={styles.minimizedBar}>
         <Image source={{uri: book.cover}} style={styles.bookCover} />
         <View style={styles.info}>
           <Text style={styles.bookTitle}>{book.title}</Text>
-          <Text style={styles.chapterTitle}>{chapter.title} (1/12)</Text>
+          <Text style={styles.chapterTitle}>{activeTrack?.title} (1/12)</Text>
         </View>
-        <Pressable
-          style={styles.iconButton}
-          onPress={() => console.log('Start/Stop')}>
-          <FontAwesome6 name="play" size={22} color={theme.text} />
-        </Pressable>
+        <PlayPauseButton style={styles.iconButton} iconSize={22} />
         <Pressable style={styles.iconButton} onPress={closeWindow}>
           <FontAwesome6 name="xmark" size={22} color={theme.text} />
         </Pressable>

@@ -9,6 +9,7 @@ import React, {
 import {ApiToken} from '../types/types.ts';
 import {LoginData, loginUser, registerUser, RegUserData} from '../api/Auth.ts';
 import {ApiError} from '../api/Api.ts';
+import {usePlayerStore} from '../store/usePlayerStore.ts';
 
 type AuthContextType = {
   token: ApiToken | null;
@@ -57,6 +58,7 @@ export const AuthProvider = ({children}: AuthProviderProps) => {
     isAuthenticated: false,
     isLoading: true,
   });
+  const {closeWindow} = usePlayerStore();
 
   const login = useCallback(async (data: LoginData) => {
     // We need to save the Token in some Secure storage
@@ -78,7 +80,8 @@ export const AuthProvider = ({children}: AuthProviderProps) => {
 
   const logout = useCallback(() => {
     dispatch({type: 'LOGOUT'});
-  }, []);
+    closeWindow();
+  }, [closeWindow]);
 
   const register = useCallback(async (data: RegUserData) => {
     // We need to save the Token in some Secure storage

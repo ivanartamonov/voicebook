@@ -6,7 +6,14 @@ export enum PlayerWindowState {
   Minimized = 'minimized',
 }
 
+export type Bookmark = {
+  bookId: string;
+  chapterId: string;
+  timeCode: number;
+};
+
 export type PlayTask = {
   book: Book;
-  chapter: Chapter;
+  chapters: Chapter[];
+  bookmark?: Bookmark;
 };

@@ -8,8 +8,8 @@ import {
 import LinearGradient from 'react-native-linear-gradient';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import Pressable from '../../../components/Pressable.tsx';
-import {usePlayer} from '../../../contexts/PlayerContext.tsx';
 import {PlayerWindowState} from '../../../types/player.ts';
+import {usePlayerStore} from '../../../store/usePlayerStore.ts';
 
 interface FloatingActionButtonProps {
   onPress: (event: GestureResponderEvent) => void;
@@ -24,7 +24,7 @@ const FloatingActionButton: React.FC<FloatingActionButtonProps> = ({
   isLoading = false,
   bookId,
 }) => {
-  const {windowState, book} = usePlayer();
+  const {windowState, book} = usePlayerStore();
 
   const marginStyle =
     windowState === PlayerWindowState.Minimized

@@ -7,7 +7,7 @@ export function secToTime(seconds: number): string {
   // Calculate hours, minutes, and seconds
   const hours = Math.floor(seconds / 3600);
   const minutes = Math.floor((seconds % 3600) / 60);
-  const remainingSeconds = seconds % 60;
+  const remainingSeconds = Math.floor(seconds % 60);
 
   // Convert numbers to strings and pad with zeros if necessary
   const formattedHours = hours.toString().padStart(2, '0');

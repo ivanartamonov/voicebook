@@ -1,13 +1,13 @@
 import React from 'react';
-import {usePlayer} from '../../contexts/PlayerContext.tsx';
 import {PlayerWindowState} from '../../types/player.ts';
 import MinimizedPlayer from './Partials/MinimizedPlayer.tsx';
 import FullSizePlayer from './Partials/FullSizePlayer.tsx';
+import {usePlayerStore} from '../../store/usePlayerStore.ts';
 
 const Player = () => {
-  const {windowState, book, chapter} = usePlayer();
+  const {windowState, book} = usePlayerStore();
 
-  if (!book || !chapter) {
+  if (!book) {
     return null;
   }
 
@@ -15,9 +15,9 @@ const Player = () => {
     case PlayerWindowState.Closed:
       return null;
     case PlayerWindowState.Minimized:
-      return <MinimizedPlayer book={book} chapter={chapter} />;
+      return <MinimizedPlayer book={book} />;
     case PlayerWindowState.Normal:
-      return <FullSizePlayer book={book} chapter={chapter} />;
+      return <FullSizePlayer book={book} />;
     default:
       return null;
   }
